@@ -255,8 +255,8 @@ Returns all the spots.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: `GET`
+  * URL: `/spots`
   * Body: none
 
 * Successful Response
@@ -275,8 +275,8 @@ Returns all the spots.
           "city": "San Francisco",
           "state": "California",
           "country": "United States of America",
-          "lat": 37.7645358,
-          "lng": -122.4730327,
+          "lat": 37.7645358, //latitude of the spot
+          "lng": -122.4730327, //longitude of the spot
           "name": "App Academy",
           "description": "Place where web developers are created",
           "price": 123,
@@ -335,8 +335,8 @@ Returns the details of a spot specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: `GET`
+  * URL: `spots/id`
   * Body: none
 
 * Successful Response
