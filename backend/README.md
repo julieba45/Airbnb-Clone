@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-!Schema Design(https://github.com/julieba45/Airbnb-Clone/blob/backend/schema.jpg?raw=true)
+![Schema Design](https://github.com/julieba45/Airbnb-Clone/blob/backend/schema.jpg?raw=true)
 
 ## API Documentation
 
