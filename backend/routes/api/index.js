@@ -9,7 +9,7 @@ router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
 
-// router.post('/test', function(req, res) {
+// router.post('/test', function(req, res) {        //will be used later
 //     res.json({ requestBody: req.body });
 //   });
 
