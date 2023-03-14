@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     spotId: DataTypes.INTEGER,
     userId:DataTypes.INTEGER,
     review: DataTypes.STRING,
-    star:DataTypes.INTEGER,
+    stars:DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   }, {

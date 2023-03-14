@@ -45,16 +45,27 @@ router.use('/users', usersRouter);
 //   }
 // );
 
-// GET /api/require-auth
-// const { User, Spot } = require('../../db/models');
+// GET /api/spots
+const { User, Spot } = require('../../db/models');
 // router.get('/spots', async (req, res) =>{
 //     const spot = await Spot.findOne({
 //         where: { id: 1 },
-//         //include: { model: User}
+//         include: { model: User}
 //       })
 //       return res.json(spot)
 //     }
 // );
+
+const {Review} = require('../../db/models');
+router.get('/reviews', async(req, res) => {
+    const review = await Review.findOne({
+        where: { id: 1 },
+        include: { model: User}
+    })
+    return res.json(review)
+})
+
+
 
 
 
