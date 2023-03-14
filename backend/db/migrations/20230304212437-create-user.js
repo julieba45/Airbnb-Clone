@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 // console.log('HERE!!!!', process.env.NODE_ENV)
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Users", {
+    await queryInterface.createTable("Users", {
       id: {
         allowNull: false,
         autoIncrement: true,

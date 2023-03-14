@@ -5,12 +5,13 @@ require('dotenv').config()
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;  // define your schema in options object
+  options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('Reviews', {
+    // options.tableName = 'SpotImages';
+    return queryInterface.createTable('SpotImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -19,21 +20,15 @@ module.exports = {
       },
       spotId: {
         type: Sequelize.INTEGER,
-        references: {
+        references:{
           model:'Spots'
         }
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users'
-        }
-      },
-      review: {
+      url: {
         type: Sequelize.STRING
       },
-      stars: {
-        type: Sequelize.INTEGER
+      preview: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -48,7 +43,7 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Reviews';
-    await queryInterface.dropTable(options);
+    options.tableName = "SpotImages";
+    return queryInterface.dropTable('SpotImages');
   }
 };
