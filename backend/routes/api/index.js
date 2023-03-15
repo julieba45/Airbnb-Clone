@@ -49,7 +49,7 @@ router.use('/spots', spotsRouter)
 // );
 
 // GET /api/spots
-const { User, Spot } = require('../../db/models');
+// const { User, Spot } = require('../../db/models');
 // router.get('/spots', async (req, res) =>{
 //     const spot = await Spot.findOne({
 //         where: { id: 1 },
@@ -59,14 +59,14 @@ const { User, Spot } = require('../../db/models');
 //     }
 // );
 
-const {Review} = require('../../db/models');
-router.get('/reviews', async(req, res) => {
-    const review = await Review.findOne({
-        where: { id: 1 },
-        include: { model: User}
-    })
-    return res.json(review)
-})
+// const {Review} = require('../../db/models');
+// router.get('/reviews', async(req, res) => {
+//     const review = await Review.findOne({
+//         where: { id: 1 },
+//         include: { model: User}
+//     })
+//     return res.json(review)
+// })
 
 
 
