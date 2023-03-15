@@ -1,6 +1,6 @@
 const express = require('express')
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { User, Spot, Review, SpotImage, Booking, sequelize } = require('../../db/models');
+const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
+const { User, Spot, Review, SpotImage, Booking, sequelize, Sequelize } = require('../../db/models');
 const router = express.Router();
 // const { Sequelize, Op, Model, DataTypes } = require("sequelize");
 
@@ -33,20 +33,6 @@ if(process.env.NODE_ENV === 'production'){
 // }
 // );
 
-//GET ALL SPOTS /api/spots (postgres)
-// router.get('/', async (req, res) => {
-//     const spot = await Spot.findAll({
-//         attributes: {
-//             include: [
-//                 [
-//                     Sequelize.literal(`(
-//                         SELECT * FROM Spots
-//                     )`)
-//                 ]
-//             ]
-//         }
-//     })
-// })
 
 // // // GET All Spots /api/spots
 // router.get('/', async (req, res) =>{
@@ -125,6 +111,43 @@ router.get('/', async (req, res) =>{
     res.json(spotList)
 
 })
+
+router.post('/', requireAuth, async(req,res) => {
+    const ownerId = req.user.userId;
+    const {address, city, state, country, lat, lng, name, description, price} = req.body
+    try{
+        const newSpot = await Spot.create({
+            ownerId,
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
+        });
+    res.json(newSpot)
+
+    } catch(err){
+        if(err instanceof Sequelize.ValidationError){
+            // console.log('HEREEEE',err.errors)
+            const errors = {};
+            err.errors.forEach((error) => {
+                errors[error.path] = error.message;
+            })
+            console.log('HERE', errors)
+            res.status(400).json({
+                message: 'Validation Error',
+                statusCode: 400,
+                errors
+            })
+        }
+    }
+})
+
+
 
 
 
