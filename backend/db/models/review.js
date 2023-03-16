@@ -19,8 +19,24 @@ module.exports = (sequelize, DataTypes) => {
   Review.init({
     spotId: DataTypes.INTEGER,
     userId:DataTypes.INTEGER,
-    review: DataTypes.STRING,
-    stars:DataTypes.INTEGER,
+    review: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Review text is required',
+        }
+      }
+    },
+    stars:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Stars must be an integer from 1 to 5'
+        }
+      }
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   }, {

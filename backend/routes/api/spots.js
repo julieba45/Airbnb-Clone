@@ -6,7 +6,6 @@ const router = express.Router();
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const spot = require('../../db/models/spot');
 
 let schema;
 if(process.env.NODE_ENV === 'production'){
@@ -260,6 +259,9 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
             sum += rev.stars
         })
         spot.avgStarRating = sum/spot.Reviews.length
+        if(!spot.avgStarRating){
+            spot.avgStarRating = 'no reviews'
+        }
         spot.numReviews = sum
         delete spot.Reviews
     })
@@ -319,6 +321,58 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
 
   })
 
+  router.post('/:spotId/reviews', requireAuth, async(req, res, next) => {
+
+    const spotId = req.params.spotId;
+    const userId = req.user.id;
+    const { review, stars } = req.body;
+    try {
+        const spot = await Spot.findOne({ where:{id: spotId,}})
+        //Error response: Couldn't find a Spot with the specified id
+        if(!spot){
+            return res.status(404).json({
+                message: "Spot couldn't be found",
+                statusCode: 404
+            });
+        }
+
+        const existingReview = await Review.findOne({
+            where: {
+                spotId,
+                userId
+            }
+        })
+        //Error response: Review from the current user already exists for the Spot
+        if(existingReview){
+            return res.status(404).json({
+                message: 'User already has a review for this spot',
+                statusCode: 403
+            })
+        }
+
+        const newReview = await Review.create({
+            userId,
+            spotId,
+            review,
+            stars
+        })
+        res.json(newReview)
+
+    } catch(err){
+        if(err instanceof Sequelize.ValidationError){
+            const errors = {};
+            err.errors.forEach((error) => {
+                errors[error.path] = error.message;
+            })
+            res.status(400).json({
+                message: 'Validation Error',
+                statusCode: 400,
+                errors
+            })
+        }
+    }
+
+  })
 
 
 module.exports = router;
