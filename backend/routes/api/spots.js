@@ -267,5 +267,8 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     res.json(spotList[0])
   })
 
+  router.put('/api/spots/:spotId', requireAuth, async(req, res) => {
+
+  })
 
 module.exports = router;
