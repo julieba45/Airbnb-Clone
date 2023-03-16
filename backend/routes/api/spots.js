@@ -267,8 +267,58 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     res.json(spotList[0])
   })
 
-  router.put('/api/spots/:spotId', requireAuth, async(req, res) => {
+  router.put('/:spotId', requireAuth, async(req, res) => {
+    const userId = req.user.id
+    const spotId = req.params.spotId
+    const {address, city, state, country, lat, lng, name, description, price } = req.body;
+
+    //Ensure authenticated user is the owner of the spot
+    try{
+    const spot = await Spot.findOne({
+        where: {
+            id: spotId,
+            owner_id: userId
+        }
+    })
+
+    //Couldn't find a Spot with the specified id
+    if(!spot){
+        return res.status(404).json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    spot.address = address,
+    spot.city = city,
+    spot.state = state,
+    spot.country = country,
+    spot.lat = lat,
+    spot.lng = lng,
+    spot.name = name,
+    spot.description = description,
+    spot.price = price
+
+    await spot.validate()
+
+    res.json(spot)
+    }catch(err){
+        if(err instanceof Sequelize.ValidationError){
+            // console.log('HEREEEE',err.errors)
+            const errors = {};
+            err.errors.forEach((error) => {
+                errors[error.path] = error.message;
+            })
+            res.status(400).json({
+                message: 'Validation Error',
+                statusCode: 400,
+                errors
+            })
+        }
+    }
 
   })
+
+
 
 module.exports = router;
