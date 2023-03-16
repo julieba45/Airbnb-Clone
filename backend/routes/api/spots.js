@@ -116,7 +116,6 @@ router.post('/', requireAuth, async(req,res) => {
     const ownerId = req.user.id;
     const {address, city, state, country, lat, lng, name, description, price} = req.body
     try{
-        console.log('HEREEEE',ownerId)
         const newSpot = await Spot.create({
             owner_id: ownerId,
             address,
@@ -138,7 +137,6 @@ router.post('/', requireAuth, async(req,res) => {
             err.errors.forEach((error) => {
                 errors[error.path] = error.message;
             })
-            console.log('HERE', errors)
             res.status(400).json({
                 message: 'Validation Error',
                 statusCode: 400,
@@ -174,7 +172,6 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
                 }]
             }
         );
-    console.log(newSpotImage)
 
     res.status(201).json({
         id: newSpotImage.id,
@@ -184,8 +181,84 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
 
   });
 
+  router.get('/current', requireAuth, async(req, res) => {
+    const userId = req.user.id
+    const spots = await Spot.findAll({
+        where: {
+            owner_id: userId
+        },
+        include: [{model: SpotImage}, {model: Review}]
+    })
+    let spotList = [];
+    spots.forEach(spot => {
+        spotList.push(spot.toJSON())
+    })
 
+    spotList.forEach(spot => {
+        spot.SpotImages.forEach(image => {
+            // console.log(image.preview)
+            if(image.preview === true){
+                spot.previewImage = image.url
+            }
+        })
+        if(!spot.previewImage){
+            spot.previewImage = 'no spot preview image found'
+        }
+        delete spot.SpotImages
+    })
 
+    spotList.forEach(spot => {
+        let sum = 0
+        spot.Reviews.forEach(rev => {
+            sum += rev.stars
+        })
+        spot.AvgRating = sum/spot.Reviews.length
+        delete spot.Reviews
+    })
+
+    res.json({Spots: spotList})
+  })
+
+  router.get('/:spotId', requireAuth, async(req, res) => {
+    const spotId = req.params.spotId
+    const spots = await Spot.findAll({
+        where: {
+            id: spotId
+        },
+        include: [
+            {
+                model: SpotImage,
+                attributes:['id', 'url', 'preview']
+            },
+            {
+                model: Review
+            },
+            {
+                model: User,
+                as: 'Owner',
+                attributes: ['id', 'firstName', 'lastName'],
+              }
+        ]
+    })
+    console.log(typeof(spots))
+
+    let spotList = [];
+    spots.forEach(spot => {
+        spotList.push(spot.toJSON())
+    })
+
+    spotList.forEach(spot => {
+        let sum = 0
+        spot.Reviews.forEach(rev => {
+            sum += rev.stars
+        })
+        spot.avgStarRating = sum/spot.Reviews.length
+        spot.numReviews = sum
+        delete spot.Reviews
+    })
+
+    res.json(spotList[0])
+  })
 
 
 module.exports = router;
