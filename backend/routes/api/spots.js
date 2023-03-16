@@ -221,6 +221,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
 
   router.get('/:spotId', requireAuth, async(req, res) => {
     const spotId = req.params.spotId
+    // console.log('here', spotId)
     const spots = await Spot.findAll({
         where: {
             id: spotId
@@ -240,7 +241,13 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
               }
         ]
     })
-    console.log(typeof(spots))
+
+    if(!spots || spots.length == 0){
+        return res.status(404).json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
 
     let spotList = [];
     spots.forEach(spot => {
