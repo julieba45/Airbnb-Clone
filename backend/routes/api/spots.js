@@ -353,7 +353,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
   router.get('/:spotId/reviews', async(req,res) => {
     const spotId = req.params.spotId;
-        const reviews = Review.findAll({
+        const reviews = await Review.findAll({
             where: {spotId},
             include: [
                 {
@@ -366,11 +366,11 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
                 }
             ]
         })
-        // if (reviews.length === 0) {
-        //     return handleNotFoundError(res, "Spot couldn't be found")
-        // }
+        if (reviews.length === 0) {
+            return handleNotFoundError(res, "Spot couldn't be found")
+        }
         res.json({
-            Review: reviews
+            Reviews: reviews
         })
   })
 
