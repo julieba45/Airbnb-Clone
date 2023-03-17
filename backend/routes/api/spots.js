@@ -12,62 +12,6 @@ if(process.env.NODE_ENV === 'production'){
     schema = process.env.SCHEMA;
 }
 
-// GET All Spots /api/spots (sqlite)
-// router.get('/', async (req, res) =>{
-//     const finderSpots = await Spot.findSpots({
-//         include: [
-//             {
-//                 model: Review,
-//                 attributes: []
-//             },
-//             {
-//                 model: SpotImage,
-//                 attributes: []
-//             }
-//         ],
-//     })
-//     const avg = finderSpots.map(spot =>
-//       spot.getAverageRating())
-//     return res.json({finderSpots, avg})
-// }
-// );
-
-
-// // // GET All Spots /api/spots
-// router.get('/', async (req, res) =>{
-//     const spot = await Spot.findAll({
-//         //raw: true,
-//         attributes: {
-//         },
-//         include: [{
-//             model: SpotImage,
-//             attributes: []
-//         }, {
-//             model: Review,
-//             attributes: {
-//                 include: [
-//                     [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
-//                     //[Sequelize.col("SpotImages.url"), "previewImage"],
-//                     [
-//                         Sequelize.literal(
-//                         `(SELECT url FROM ${
-//                             schema ? `"${schema}"."SpotImages"` : 'SpotImages'
-//                         } WHERE "SpotImages"."spotId" = "Spot"."id" AND "SpotImages"."preview" = true LIMIT 5)`
-//                         ),
-//                         'previewImage',
-//                     ],
-//                 ],
-
-//             },
-//         }],
-//       })
-//       console.log(spot)
-//       return res.json(spot)
-//     }
-// );
-
-
-
 router.get('/', async (req, res) =>{
     const spots = await Spot.findAll({
         // review: review.getAverageRating(),

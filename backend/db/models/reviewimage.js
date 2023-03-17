@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       ReviewImage.belongsTo(models.Review, {foreignKey: 'reviewId'})
     }
+
+    static getReviewImages(reviewId){
+      return this.findAll({where: {reviewId}})
+    }
   }
   ReviewImage.init({
     reviewId: DataTypes.INTEGER,
