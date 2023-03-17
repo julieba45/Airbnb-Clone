@@ -14,12 +14,12 @@ module.exports = {
     {
       spotId: 1,
       url:'url image',
-      preview:'true'
+      preview: true
     },
     {
       spotId: 1,
       url:'url image',
-      preview:'true'
+      preview: true
     }
    ])
   },

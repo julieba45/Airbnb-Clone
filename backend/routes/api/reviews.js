@@ -29,6 +29,14 @@ const validateReviews = [
     handleValidationErrors
   ];
 
+const setPreviewImage = (images) => {
+    const previewImage = images.find((image) => image.preview);
+    if(previewImage){
+        return previewImage.url
+    }
+    return 'no spot preview image found'
+}
+
 const checkReviewExists = async (reviewId) => {
     const review = await Review.findByPk(reviewId)
     if(!review){
@@ -83,6 +91,46 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
         })
     }
 
+})
+
+router.get('/current', requireAuth, async(req, res, next) => {
+    const userId = req.user.id
+
+    const reviews = await Review.findAll({
+        where: {
+            userId: userId
+        },
+        include: [
+            {
+                model: User,
+                attributes: ['id', 'firstName', 'lastName']
+            },{
+                model: Spot,
+                attributes: {
+                    exlude: ['description']
+                },
+                include: [
+                    {model: SpotImage},
+                ]
+            },{
+                model: ReviewImage,
+                attributes: ['id', 'url']
+            }
+        ]
+    })
+
+    const reviewList = [];
+    reviews.forEach(review => {
+        const reviewJson = review.toJSON()
+        console.log(reviewJson)
+        reviewJson.Spot.previewImage = setPreviewImage(reviewJson.Spot.SpotImages)
+        delete reviewJson.Spot.createdAt;
+        delete reviewJson.Spot.updatedAt;
+        delete reviewJson.Spot.description;
+        delete reviewJson.Spot.SpotImages;
+        reviewList.push(reviewJson)
+    })
+    res.json({Reviews: reviewList})
 })
 
 module.exports = router;
