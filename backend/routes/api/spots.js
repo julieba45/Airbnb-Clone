@@ -103,11 +103,14 @@ router.get('/', async (req, res) =>{
         spot.Reviews.forEach(rev => {
             sum += rev.stars
         })
-        spot.AvgRating = sum/spot.Reviews.length
+        spot.avgRating = sum/spot.Reviews.length
+        if(!spot.avgRating){
+            spot.avgRating = 'no reviews'
+        }
         delete spot.Reviews
     })
 
-    res.json(spotList)
+    res.json({Spots:spotList})
 
 })
 
@@ -211,7 +214,10 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         spot.Reviews.forEach(rev => {
             sum += rev.stars
         })
-        spot.AvgRating = sum/spot.Reviews.length
+        spot.avgRating = sum/spot.Reviews.length
+        if(!spot.avgRating){
+            spot.avgRating = 'no reviews'
+        }
         delete spot.Reviews
     })
 
@@ -373,6 +379,8 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     }
 
   })
+
+
 
 
 module.exports = router;

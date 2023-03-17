@@ -8,14 +8,20 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const validateSignup = [
+  check('firstName')
+    .exists({ checkFalsy: true })
+    .withMessage('First Name is required'),
+  check('lastName')
+    .exists({ checkFalsy: true })
+    .withMessage('Last Name is required'),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage('Please provide a valid email.'),
+    .withMessage('Invalid email'),
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
-    .withMessage('Please provide a username with at least 4 characters.'),
+    .withMessage('Username is required'),
   check('username')
     .not()
     .isEmail()
@@ -25,6 +31,7 @@ const validateSignup = [
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
   handleValidationErrors
+
 ];
 
 // Sign up (/api/users)
@@ -33,12 +40,36 @@ router.post(
     validateSignup,
     async (req, res) => {
       const { firstName, lastName, email, password, username } = req.body;
-      const user = await User.signup({ firstName, lastName, email, username, password });
 
+        const existingUserWithEmail = await User.findOne({ where: { email } });
+        const existingUserWithUsername = await User.findOne({ where: { username } });
+        if (existingUserWithEmail) {
+          return res.status(403).json({
+            message: 'User already exists',
+            statusCode: 403,
+            errors: { email: 'User with that email already exists' },
+          });
+        }
+
+        if (existingUserWithUsername) {
+          return res.status(403).json({
+            message: 'User already exists',
+            statusCode: 403,
+            errors: { username: 'User with that username already exists' },
+          });
+        }
+
+        const user = await User.signup({ firstName, lastName, email, username, password });
+        // const token = await setTokenCookie(res, user);
       await setTokenCookie(res, user);
 
       return res.json({
-        user: user
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        username: user.username,
+        token: ''
       });
     }
 );
