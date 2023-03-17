@@ -20,6 +20,27 @@ const handleValidationErrors = (req, _res, next) => {
     next();
   };
 
+  const handleSequelizeValidationError = (err, res) => {
+    const errors = {};
+    err.errors.forEach((error) => {
+      errors[error.path] = error.message;
+    });
+    res.status(400).json({
+      message: "Validation Error",
+      statusCode: 404,
+      errors,
+    });
+  };
+
+  const handleNotFoundError = (res, message) => {
+    res.status(404).json({
+      message: message,
+      statusCode: 404,
+    });
+  };
+
   module.exports = {
-    handleValidationErrors
+    handleValidationErrors,
+    handleSequelizeValidationError,
+    handleNotFoundError
   };

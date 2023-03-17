@@ -13,18 +13,6 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    // static async getAverageRating(spotId){
-    //   const reviews = await Review.findAll({
-    //     where: {spotId},
-    //     attributes: ['stars']
-    //   })
-    //   if(reviews.length === 0){
-    //     return 0
-    //   }
-    //   const sum = reviews.reduce((total, review) => total + review.stars,0);
-    //   // console.log(sum, sum/reviews.length)
-    //   return sum /reviews.length
-    // }
 
     static associate(models) {
       // define association here
@@ -42,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   Spot.init({
     owner_id: {
       type: DataTypes.INTEGER,
-      // allowNull: false
+      allowNull: false
     },
     address: {
       type:DataTypes.STRING,
