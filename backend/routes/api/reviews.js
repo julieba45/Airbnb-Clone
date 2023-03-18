@@ -4,7 +4,7 @@ const { User, Spot, Review, SpotImage, Booking, ReviewImage, sequelize, Sequeliz
 const router = express.Router();
 
 const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { handleValidationErrors, handleNotFoundError } = require('../../utils/validation');
 
 
 let schema;
@@ -131,6 +131,47 @@ router.get('/current', requireAuth, async(req, res, next) => {
         reviewList.push(reviewJson)
     })
     res.json({Reviews: reviewList})
+})
+
+router.put('/:reviewId', requireAuth, validateReviews, async(req, res, next) => {
+    const reviewId = req.params.reviewId
+    const userId = req.user.id
+    const {review, stars} = req.body
+
+    try{
+        const checkreview = await checkReviewExists(reviewId)
+
+        checkReviewOwner(checkreview, userId)
+        console.log('BEFORE FIND')
+        const _review = await Review.findOne({
+            where: {
+                userId: userId,
+                id: reviewId
+            }
+        })
+
+        // if (_review.length === 0) {
+        //     return handleNotFoundError(res, "Spot couldn't be found")
+        // }
+
+        await _review.update({
+            review,
+            stars
+        })
+
+        res.json({
+            id: _review.id,
+            userId: _review.userId,
+            spotId: _review.spotId,
+            review: _review.review,
+            stars: _review.stars,
+            createdAt: _review.createdAt,
+            updatedAt: _review.updatedAt,
+        })
+    }catch(err){
+        handleNotFoundError(res, 'message')
+    }
+
 })
 
 module.exports = router;
