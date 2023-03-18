@@ -1,4 +1,6 @@
 const { validationResult } = require('express-validator');
+const { Op } = require('sequelize');
+const { Booking } = require('../db/models');
 
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
@@ -39,8 +41,42 @@ const handleValidationErrors = (req, _res, next) => {
     });
   };
 
+
+
+  const validateStartDate = async(spotId, startDate)=> {
+    console.log("START")
+    const bookings = await Booking.findAll({
+      where: {
+        spotId,
+        [Op.and]: [
+          { startDate: { [Op.lte]: startDate } },
+          { endDate: { [Op.gte]: startDate } },
+        ]
+      }
+    })
+
+    return bookings.length > 0;
+  }
+
+
+  const validateEndDate = async(spotId, endDate)=> {
+    console.log('END')
+    const bookings = await Booking.findAll({
+      where: {
+        spotId,
+        [Op.and]: [
+          { startDate: { [Op.lte]: endDate } },
+          { endDate: { [Op.gte]: endDate } },
+        ]
+      }
+    })
+    return bookings.length > 0;
+  }
+
   module.exports = {
     handleValidationErrors,
     handleSequelizeValidationError,
-    handleNotFoundError
+    handleNotFoundError,
+    validateStartDate,
+    validateEndDate
   };

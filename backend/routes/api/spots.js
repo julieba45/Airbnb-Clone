@@ -5,7 +5,8 @@ const router = express.Router();
 // const { Sequelize, Op, Model, DataTypes } = require("sequelize");
 
 const { check } = require('express-validator');
-const { handleValidationErrors, handleSequelizeValidationError, handleNotFoundError } = require('../../utils/validation');
+const { body } = require('express-validator');
+const { handleValidationErrors, handleSequelizeValidationError, handleNotFoundError, validateStartDate, validateEndDate } = require('../../utils/validation');
 
 let schema;
 if(process.env.NODE_ENV === 'production'){
@@ -52,6 +53,27 @@ const validateSpots = [
       .withMessage('Preview must be a boolean value'),
     handleValidationErrors
   ];
+
+  const validateBookingDates = [
+    body('startDate')
+        .exists({checkFalsy: true})
+        .withMessage('Start Date is required')
+        .isISO8601()
+        .withMessage('Start date must have valid date format (YYYY-MM-DD)'),
+    body('endDate')
+        .exists({checkFalsy: true})
+        .withMessage('End date is required')
+        .isISO8601()
+        .withMessage('End date must have valid date formate (YYYY-MM-DD)')
+        .custom((endDate, { req }) => {
+            const startDate = req.body.startDate
+            if(new Date(startDate) >= new Date(endDate)){
+                throw new Error('End date must be on or before start date')
+            }
+            return true
+        }),
+    handleValidationErrors
+  ]
 
 
 const calculateAverageRating = (reviews) => {
@@ -374,6 +396,73 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         })
   })
 
+  router.post('/:spotId/bookings', requireAuth, validateBookingDates, async(req, res) => {
+    const spotId = req.params.spotId
+    const userId = req.user.id
+    const { startDate, endDate } = req.body
+
+    const spot = await Spot.findByPk(spotId)
+    if (!spot) {
+        return handleNotFoundError(res, "Spot couldn't be found")
+    }
+
+    //check if the user does not own the spot
+    if(spot.userId === userId){
+        return res.status(400).json({
+            message: 'You cannot book your own place',
+            statusCode: 400,
+        })
+    }
+
+    //Check booking conflict
+    // const bookingconflict = await validateBookingConflict(spotId, startDate, endDate);
+    // if(bookingconflict){
+    //     return res.status(403).json({
+    //         message: 'Sorry, this spot is already booked for the specified dates',
+    //         statusCode: 403,
+    //         errors: {
+    //             startDate: "Start date conflicts with an existing booking",
+    //             endDate: "End date conflicts with an existing booking"
+    //         }
+    //     })
+    // }
+
+    // Check booking conflict
+    const startconflict = await validateStartDate(spotId, startDate);
+    const endconflict = await validateEndDate(spotId, endDate);
+    console.log("START CHECKING")
+    if((startconflict==true)|| (endconflict==true)){
+        console.log('THERE IS A CONFLICT')
+        let errmsg = {}
+        if (startconflict){
+            console.log('START DATE IS WRONG')
+            errmsg['startDate'] = "Start date conflicts with an existing booking"
+        }
+
+        if (endconflict){
+            errmsg['endDate'] = "End date conflicts with an existing booking"
+        }
+        console.log('ERROR MESSAGE', errmsg)
+        return res.status(403).json({
+            message: 'Sorry, this spot is already booked for the specified dates',
+            statusCode: 403,
+            errmsg
+        })
+    }
+
+
+    const booking = await Booking.create({ spotId, userId, startDate, endDate })
+
+    res.status(200).json({
+        id: booking.id,
+        spotId: booking.spotId,
+        userId: booking.userId,
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+        createdAt: booking.createdAt,
+        updatedAt: booking.updatedAt,
+    })
+  })
 
 
 module.exports = router;
