@@ -169,7 +169,7 @@ router.put('/:reviewId', requireAuth, validateReviews, async(req, res, next) => 
             updatedAt: _review.updatedAt,
         })
     }catch(err){
-        handleNotFoundError(res, 'message')
+        handleNotFoundError(res, "Review couldn't be found")
     }
 
 })
