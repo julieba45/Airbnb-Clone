@@ -55,6 +55,9 @@ router.get('/current', requireAuth, async(req, res) => {
     res.json({Bookings: bookingList})
 })
 
+// router.get('/current', requireAuth, async(req, res) => {
+
+// })
 
 
 
