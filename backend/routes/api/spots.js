@@ -175,7 +175,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
   });
 
 
-  //DONT FORGET TO REFACTOR THESE THEY ARE MESSSSYYY!!!!
+  ////////////////////////////////DONT FORGET TO REFACTOR THESE THEY ARE MESSSSYYY!!!!
   router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id
     const spots = await Spot.findAll({
@@ -373,6 +373,8 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
   })
 
+  ////////////////////////////////////////////////////////////////////////////////
+
   router.get('/:spotId/reviews', async(req,res) => {
     const spotId = req.params.spotId;
         const reviews = await Review.findAll({
@@ -414,19 +416,6 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         })
     }
 
-    //Check booking conflict
-    // const bookingconflict = await validateBookingConflict(spotId, startDate, endDate);
-    // if(bookingconflict){
-    //     return res.status(403).json({
-    //         message: 'Sorry, this spot is already booked for the specified dates',
-    //         statusCode: 403,
-    //         errors: {
-    //             startDate: "Start date conflicts with an existing booking",
-    //             endDate: "End date conflicts with an existing booking"
-    //         }
-    //     })
-    // }
-
     // Check booking conflict
     const startconflict = await validateStartDate(spotId, startDate);
     const endconflict = await validateEndDate(spotId, endDate);
@@ -462,6 +451,55 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         createdAt: booking.createdAt,
         updatedAt: booking.updatedAt,
     })
+  })
+
+  router.get('/:spotId/bookings', requireAuth, async(req, res) => {
+    const spotId = req.params.spotId
+    const userId = req.user.id
+
+    const spot = await Spot.findByPk(spotId)
+    if (!spot) {
+        return handleNotFoundError(res, "Spot couldn't be found")
+    }
+    //Checking based on whether the user is the  Owner of the Spot
+    const isOwner = spot.owner_id === userId
+
+    let bookings
+    console.log(isOwner, spot.owner_id, userId, 'FLAD')
+    if(isOwner){
+        bookings = await Booking.findAll({
+            where: {
+                spotId: spotId
+            },
+            include: [
+                { model: User, attributes: ['id', 'firstName', 'lastName'] }
+            ]
+        })
+    } else {
+        console.log('ELSE')
+        bookings = await Booking.findAll({
+            where: {
+                spotId: spotId
+            },
+            attributes: {
+                exclude: ['updatedAt', 'createdAt', 'id', 'userId']
+            }
+        })
+    }
+
+    const bookingList = [];
+    bookings.forEach(booking => {
+        const bookingJson = booking.toJSON()
+        console.log('FLAG', bookingJson)
+
+        bookingList.push(bookingJson)
+    })
+
+
+    res.json({
+        Bookings: bookingList
+    })
+
   })
 
 
