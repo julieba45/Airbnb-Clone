@@ -142,7 +142,7 @@ router.put('/:reviewId', requireAuth, validateReviews, async(req, res, next) => 
         const checkreview = await checkReviewExists(reviewId)
 
         checkReviewOwner(checkreview, userId)
-        console.log('BEFORE FIND')
+        // console.log('BEFORE FIND')
         const _review = await Review.findOne({
             where: {
                 userId: userId,
