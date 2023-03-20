@@ -476,7 +476,6 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
             ]
         })
     } else {
-        console.log('ELSE')
         bookings = await Booking.findAll({
             where: {
                 spotId: spotId
