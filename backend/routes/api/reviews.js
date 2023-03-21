@@ -183,9 +183,13 @@ router.delete('/:reviewId', requireAuth, async(req, res) => {
     if(!review){
         return handleNotFoundError(res, "Review couldn't be found")
     }
-    if(review.userId === userId){
-        await review.destroy()
+    if(review.userId !== userId){
+        return res.status(403).json({
+            message: "Unauthorized",
+            statusCode: 403
+        })
     }
+    await review.destroy()
     res.json({
         message: 'Successfully deleted',
         statusCode: 200

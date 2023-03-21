@@ -157,8 +157,11 @@ router.delete('/:bookingId', requireAuth, async(req, res) => {
   }
   //check if the booking belongs to the current user or spot
   const spot = await Spot.findByPk(booking.spotId)
-  if(spot.owner_id === userId || booking.userId === userId){
-    await booking.destroy()
+  if(spot.owner_id !== userId && booking.userId !== userId){
+    return res.status(403).json({
+        message: "Unauthorized",
+        statusCode: 403
+    })
   }
 
   const today = new Date();
@@ -169,6 +172,8 @@ router.delete('/:bookingId', requireAuth, async(req, res) => {
             statusCode: 403,
         });
     }
+
+    await booking.destroy()
     res.json({
         message: 'Successfully deleted',
         statusCode: 200

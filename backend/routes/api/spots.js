@@ -431,7 +431,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         if (endconflict){
             errmsg['endDate'] = "End date conflicts with an existing booking"
         }
-        console.log('ERROR MESSAGE', errmsg)
+
         return res.status(403).json({
             message: 'Sorry, this spot is already booked for the specified dates',
             statusCode: 403,
@@ -444,7 +444,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
     res.status(200).json({
         id: booking.id,
-        spotId: booking.spotId,
+        spotId: Number(booking.spotId),
         userId: booking.userId,
         startDate: booking.startDate,
         endDate: booking.endDate,
@@ -493,12 +493,33 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
         bookingList.push(bookingJson)
     })
-
-
     res.json({
         Bookings: bookingList
     })
+  })
 
+  router.delete('/:spotId', requireAuth, async(req, res) => {
+    const spotId = req.params.spotId;
+    const userId = req.user.id
+
+    //if the spot belongs to the user
+    const spot = await Spot.findByPk(spotId)
+    if(!spot){
+        return handleNotFoundError(res, "Spot couldn't be found")
+    }
+
+    if(spot.owner_id !== userId){
+        return res.status(403).json({
+            message: "Unauthorized",
+            statusCode: 403
+        })
+    }
+
+    await spot.destroy()
+    res.json({
+        message: 'Successfully deleted',
+        statusCode: 200
+    })
   })
 
 
