@@ -21,9 +21,14 @@ router.delete('/:imageId', requireAuth, async(req, res) => {
 
     //check if the reviewimage belongs to the current user
     const review = await Review.findByPk(reviewImage.reviewId)
-    if(userId === review.userId){
-        await reviewImage.destroy()
+    if(userId !== review.userId){
+        return res.status(403).json({
+            message: "Unauthorized",
+            statusCode: 403
+        })
     }
+    console.log('DESTROY')
+    await reviewImage.destroy()
     res.json({
         message: 'Successfully deleted',
         statusCode: 200
