@@ -3,7 +3,7 @@ const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth')
 const { User, Spot, Review, SpotImage, Booking, ReviewImage, sequelize, Sequelize } = require('../../db/models');
 const router = express.Router();
 // const { Sequelize, Op, Model, DataTypes } = require("sequelize");
-
+const { query } = require('express-validator')
 const { check } = require('express-validator');
 const { body } = require('express-validator');
 const { handleValidationErrors, handleSequelizeValidationError, handleNotFoundError, validateStartDate, validateEndDate } = require('../../utils/validation');
@@ -75,6 +75,24 @@ const validateSpots = [
     handleValidationErrors
   ]
 
+  const validateQueryParams = [
+    query('page')
+        .optional()
+        .isInt({min: 1, max: 10})
+        .withMessage('Page must be greater than or equal to 1'),
+    query('size')
+        .optional()
+        .isInt({min: 1, max: 20})
+        .withMessage('Size must be greater than or equal to 1'),
+    query('maxLat').optional().isDecimal().withMessage("Maximum latitude is invalid"),
+    query('minLat').optional().isDecimal().withMessage("Minimum latitude is invalid"),
+    query('minLng').optional().isDecimal().withMessage("Minimum longitude is invalid"),
+    query('maxLng').optional().isDecimal().withMessage("Maximum longitude is invalid"),
+    query('minPrice').optional().isDecimal({min: 0}).withMessage("Minimum price must be greater than or equal to 0"),
+    query('maxPrice').optional().isDecimal({min: 0}).withMessage("Maximum price must be greater than or equal to 0"),
+    handleValidationErrors
+  ]
+
 
 const calculateAverageRating = (reviews) => {
     const sum = reviews.reduce((acc, rev) => acc + rev.stars, 0)
@@ -90,8 +108,32 @@ const setPreviewImage = (images) => {
     return 'no spot preview image found'
 }
 
-router.get('/', async (req, res) =>{
+router.get('/', validateQueryParams, async(req, res)=> {
+    const page = parseInt(req.query.page) || 1;
+    const size = parseInt(req.query.size) || 20;
+    const offset = (page -1) * size;
+    const filtered = {}
+    if(req.query.minLat && req.query.maxLat){
+        filtered.lat = {[Op.between]: [req.query.minLat, req.query.maxLat] }
+        console.log('1')
+    }
+    if(req.query.minLng && req.query.maxLng){
+        filtered.lng = {[Op.between]: [req.query.minLng, req.query.maxLng]}
+        console.log('2')
+    }
+    if(req.query.minPrice){
+        filtered.price = {[Op.gte]: req.query.minPrice}
+        console.log('3')
+    }
+    if(req.query.maxPrice){
+        filtered.price = {...filtered.price, [Op.lte]: req.query.maxPrice}
+        console.log('4')
+    }
+
     const spots = await Spot.findAll({
+        where: filtered,
+        offset,
+        limit: size,
         include: [
             {
                 model: Review,
@@ -105,8 +147,8 @@ router.get('/', async (req, res) =>{
     const spotList = [];
     spots.forEach(spot => {
         const spotJson = spot.toJSON()
-        console.log('HEREEEE!!!!', spotJson)
-        spotJson.preview = setPreviewImage(spotJson.SpotImages)
+        // console.log('HEREEEE!!!!', spotJson)
+        spotJson.previewImage = setPreviewImage(spotJson.SpotImages)
         delete spotJson.SpotImages;
 
         spotJson.avgRating = calculateAverageRating(spotJson.Reviews)
@@ -114,8 +156,13 @@ router.get('/', async (req, res) =>{
 
         spotList.push(spotJson)
     })
-    res.json({Spots: spotList})
-})
+
+    res.status(200).json({
+        Spots: spotList,
+        page: page,
+        size: size
+    })
+  })
 
 router.post('/', requireAuth, validateSpots, async(req,res) => {
     const ownerId = req.user.id;
@@ -521,6 +568,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         statusCode: 200
     })
   })
+
 
 
 module.exports = router;
