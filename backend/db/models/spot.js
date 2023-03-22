@@ -89,12 +89,12 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: {
-          args: [0,50],
-          msg: 'Name must be less than 50 characters'
-        }
-      }
+      // validate: {
+      //   len: {
+      //     args: [0,50],
+      //     msg: 'Name must be less than 50 characters'
+      //   }
+      // }
     },
     description: {
       type: DataTypes.STRING,
