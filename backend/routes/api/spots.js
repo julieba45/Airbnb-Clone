@@ -107,7 +107,7 @@ const setPreviewImage = (images) => {
     }
     return 'no spot preview image found'
 }
-
+//Get all Spots
 router.get('/', validateQueryParams, async(req, res)=> {
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 20;
@@ -194,13 +194,19 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     const userId = req.user.id;
     const { url, preview } = req.body;
 
-    const spot = await Spot.findOne({ where: { id: spotId, owner_id: userId } });
-
+    const spot = await Spot.findOne({ where: { id: spotId } });
     if (!spot) {
         return handleNotFoundError(res, "Spot couldn't be found")
     }
+
+    if(spot.owner_id !== userId){
+        return res.status(403).json({
+            message: "Forbidden",
+            statusCode: 403
+        })
+    }
+
     try{
-        console.log('HEREEEEE', preview)
         const newSpotImage = await SpotImage.create(
             {
                 spotId, url, preview: !!preview
@@ -223,6 +229,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
 
   ////////////////////////////////DONT FORGET TO REFACTOR THESE THEY ARE MESSSSYYY!!!!
+  //Get all Spots owned by the Current User
   router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id
     const spots = await Spot.findAll({
@@ -263,8 +270,8 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
     res.json({Spots: spotList})
   })
-
-  router.get('/:spotId', requireAuth, async(req, res) => {
+  //Get details of a Spot from an id
+  router.get('/:spotId', async(req, res) => {
     const spotId = req.params.spotId
     // console.log('here', spotId)
     const spots = await Spot.findAll({
@@ -315,7 +322,8 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     res.json(spotList[0])
   })
 
-  router.put('/:spotId', requireAuth, async(req, res) => {
+//Edit a Spot
+  router.put('/:spotId', validateSpots, requireAuth, async(req, res) => {
     const userId = req.user.id
     const spotId = req.params.spotId
     const {address, city, state, country, lat, lng, name, description, price } = req.body;
@@ -325,7 +333,6 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     const spot = await Spot.findOne({
         where: {
             id: spotId,
-            owner_id: userId
         }
     })
 
@@ -336,33 +343,35 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
             statusCode: 404
         })
     }
+    //Spot must belong to the current user
+    if(spot.owner_id !==userId){
+        return res.status(403).json({
+            message: "Forbidden",
+            statusCode: 403
+        })
+    }
+    await spot.update({
+        address, city, state, country, lat, lng, name, description, price
+    })
 
-    spot.address = address,
-    spot.city = city,
-    spot.state = state,
-    spot.country = country,
-    spot.lat = lat,
-    spot.lng = lng,
-    spot.name = name,
-    spot.description = description,
-    spot.price = price
+    res.json({
+        id: spot.id,
+        ownerId: spot.owner_id,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
 
-    await spot.validate()
-
-    res.json(spot)
+    })
     }catch(err){
-        if(err instanceof Sequelize.ValidationError){
-            // console.log('HEREEEE',err.errors)
-            const errors = {};
-            err.errors.forEach((error) => {
-                errors[error.path] = error.message;
-            })
-            res.status(400).json({
-                message: 'Validation Error',
-                statusCode: 400,
-                errors
-            })
-        }
+        handleSequelizeValidationError(err, res)
     }
 
   })
@@ -405,17 +414,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         res.json(newReview)
 
     } catch(err){
-        if(err instanceof Sequelize.ValidationError){
-            const errors = {};
-            err.errors.forEach((error) => {
-                errors[error.path] = error.message;
-            })
-            res.status(400).json({
-                message: 'Validation Error',
-                statusCode: 400,
-                errors
-            })
-        }
+        handleSequelizeValidationError(err, res)
     }
 
   })

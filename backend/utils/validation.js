@@ -29,7 +29,7 @@ const handleValidationErrors = (req, _res, next) => {
     });
     res.status(400).json({
       message: "Validation Error",
-      statusCode: 404,
+      statusCode: 400,
       errors,
     });
   };
