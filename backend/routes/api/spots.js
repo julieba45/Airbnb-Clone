@@ -376,6 +376,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
   })
 
+  //Create a Review for a Spot based on the Spot's id
   router.post('/:spotId/reviews', requireAuth, async(req, res, next) => {
 
     const spotId = req.params.spotId;
