@@ -107,7 +107,7 @@ const setPreviewImage = (images) => {
     }
     return 'no spot preview image found'
 }
-
+//Get all Spots
 router.get('/', validateQueryParams, async(req, res)=> {
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 20;
@@ -194,13 +194,19 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     const userId = req.user.id;
     const { url, preview } = req.body;
 
-    const spot = await Spot.findOne({ where: { id: spotId, owner_id: userId } });
-
+    const spot = await Spot.findOne({ where: { id: spotId } });
     if (!spot) {
         return handleNotFoundError(res, "Spot couldn't be found")
     }
+
+    if(spot.owner_id !== userId){
+        return res.status(403).json({
+            message: "Forbidden",
+            statusCode: 403
+        })
+    }
+
     try{
-        console.log('HEREEEEE', preview)
         const newSpotImage = await SpotImage.create(
             {
                 spotId, url, preview: !!preview
@@ -223,6 +229,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
 
   ////////////////////////////////DONT FORGET TO REFACTOR THESE THEY ARE MESSSSYYY!!!!
+  //Get all Spots owned by the Current User
   router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id
     const spots = await Spot.findAll({
@@ -264,7 +271,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     res.json({Spots: spotList})
   })
 
-  router.get('/:spotId', requireAuth, async(req, res) => {
+  router.get('/:spotId', async(req, res) => {
     const spotId = req.params.spotId
     // console.log('here', spotId)
     const spots = await Spot.findAll({

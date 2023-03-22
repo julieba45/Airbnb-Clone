@@ -185,7 +185,7 @@ router.delete('/:reviewId', requireAuth, async(req, res) => {
     }
     if(review.userId !== userId){
         return res.status(403).json({
-            message: "Unauthorized",
+            message: "Forbidden",
             statusCode: 403
         })
     }
