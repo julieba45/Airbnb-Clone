@@ -75,6 +75,16 @@ const validateSpots = [
     handleValidationErrors
   ]
 
+  const validateReviews = [
+    check('review')
+      .exists({ checkFalsy: true })
+      .withMessage('Review text is required'),
+    check('stars')
+      .exists({ checkFalsy: true })
+      .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+  ];
+
   const validateQueryParams = [
     query('page')
         .optional()
@@ -377,7 +387,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
   })
 
   //Create a Review for a Spot based on the Spot's id
-  router.post('/:spotId/reviews', requireAuth, async(req, res, next) => {
+  router.post('/:spotId/reviews', requireAuth, validateReviews, async(req, res, next) => {
 
     const spotId = req.params.spotId;
     const userId = req.user.id;
@@ -422,6 +432,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
   ////////////////////////////////////////////////////////////////////////////////
 
+  //Get all Reviews by a Spot's id
   router.get('/:spotId/reviews', async(req,res) => {
     const spotId = req.params.spotId;
         const reviews = await Review.findAll({
@@ -445,6 +456,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         })
   })
 
+  //Create a Booking from a Spot based on the Spot's id
   router.post('/:spotId/bookings', requireAuth, validateBookingDates, async(req, res) => {
     const spotId = req.params.spotId
     const userId = req.user.id
@@ -456,7 +468,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     }
 
     //check if the user does not own the spot
-    if(spot.userId === userId){
+    if(spot.owner_id === userId){
         return res.status(400).json({
             message: 'You cannot book your own place',
             statusCode: 400,

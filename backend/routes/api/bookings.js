@@ -31,14 +31,14 @@ const validateBookingDates = [
             }
             return true
         })
-        .custom((endDate) => {
+        .custom((startDate) => {
             const today = new Date().toJSON().slice(0,10)
-            if(new Date(endDate) < new Date(today)){
-                throw new Error("Past bookings can't be modified")
+            // console.log('FLAH',new Date(endDate),new Date(today) )
+            if(new Date(startDate) < new Date(today)){
+                throw new Error("You can't change your current booking to the past")
             }
             return true
         }),
-
     handleValidationErrors
   ]
 
@@ -65,6 +65,12 @@ const checkBookingOwner = (booking, userId) => {
     return true
 }
 
+
+const pastBooking = (booking) => {
+
+}
+
+//Get all of the Current User's Bookings
 router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id
 
@@ -100,6 +106,7 @@ router.get('/current', requireAuth, async(req, res) => {
     res.json({Bookings: bookingList})
 })
 
+//Edit a Booking
 router.put('/:bookingId', requireAuth, validateBookingDates, async(req, res) => {
     const bookingId = req.params.bookingId
     const userId = req.user.id
@@ -108,11 +115,17 @@ router.put('/:bookingId', requireAuth, validateBookingDates, async(req, res) => 
         const booking = await checkBookingExists(bookingId)
        checkBookingOwner(booking, userId)
 
+       const today = new Date().toJSON().slice(0,10)
+        if(new Date(booking.endDate) < new Date(today)){
+            // console.log('Error is here')
+            throw {message: "Past bookings can't be modified", statusCode: 403}
+        }
+
         // console.log('Check booking conflict')
         const startconflict = await validateStartDate(booking.spotId, startDate);
         const endconflict = await validateEndDate(booking.spotId, endDate);
         if((startconflict==true)|| (endconflict==true)){
-            console.log('THERE IS A CONFLICT')
+            // console.log('THERE IS A CONFLICT')
             let errmsg = {}
             if (startconflict){
                 console.log('START DATE IS WRONG')
@@ -143,7 +156,10 @@ router.put('/:bookingId', requireAuth, validateBookingDates, async(req, res) => 
         res.json(_booking)
 
     } catch(err){
-        handleNotFoundError(res, "Booking couldn't be found")
+        res.status(err.statusCode).json({
+            message: err.message,
+            statusCode: err.statusCode,
+          });
     }
 })
 
