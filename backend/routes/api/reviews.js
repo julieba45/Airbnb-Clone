@@ -47,8 +47,9 @@ const checkReviewExists = async (reviewId) => {
 
 //Only the owner of the review is authorized to add an image
 const checkReviewOwner = (review, userId) => {
+    console.log('flagh', review.userId, userId)
     if(review.userId !== userId){
-        throw {message: 'Unauthorized', statusCode: 403}
+        throw {message: 'Forbidden', statusCode: 403}
     }
     return true
 }
@@ -56,6 +57,7 @@ const checkReviewOwner = (review, userId) => {
 
 const max_images = 10;
 
+//Add an Image to a Review based on the Review's id
 router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
     try{
         const  reviewId  = req.params.reviewId;
@@ -122,7 +124,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
     const reviewList = [];
     reviews.forEach(review => {
         const reviewJson = review.toJSON()
-        console.log(reviewJson)
+        // console.log(reviewJson)
         reviewJson.Spot.previewImage = setPreviewImage(reviewJson.Spot.SpotImages)
         delete reviewJson.Spot.createdAt;
         delete reviewJson.Spot.updatedAt;
@@ -133,6 +135,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
     res.json({Reviews: reviewList})
 })
 
+//Edit a Review
 router.put('/:reviewId', requireAuth, validateReviews, async(req, res, next) => {
     const reviewId = req.params.reviewId
     const userId = req.user.id
@@ -142,17 +145,12 @@ router.put('/:reviewId', requireAuth, validateReviews, async(req, res, next) => 
         const checkreview = await checkReviewExists(reviewId)
 
         checkReviewOwner(checkreview, userId)
-        // console.log('BEFORE FIND')
         const _review = await Review.findOne({
             where: {
                 userId: userId,
                 id: reviewId
             }
         })
-
-        // if (_review.length === 0) {
-        //     return handleNotFoundError(res, "Spot couldn't be found")
-        // }
 
         await _review.update({
             review,
@@ -168,8 +166,11 @@ router.put('/:reviewId', requireAuth, validateReviews, async(req, res, next) => 
             createdAt: _review.createdAt,
             updatedAt: _review.updatedAt,
         })
-    }catch(err){
-        handleNotFoundError(res, "Review couldn't be found")
+    }catch(error){
+        return res.status(error.statusCode).json({
+            message: error.message,
+            statusCode: error.statusCode
+        })
     }
 
 })
