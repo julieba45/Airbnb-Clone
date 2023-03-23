@@ -175,7 +175,7 @@ router.delete('/:bookingId', requireAuth, async(req, res) => {
   const spot = await Spot.findByPk(booking.spotId)
   if(spot.owner_id !== userId && booking.userId !== userId){
     return res.status(403).json({
-        message: "Unauthorized",
+        message: "Forbidden",
         statusCode: 403
     })
   }

@@ -569,7 +569,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
     if(spot.owner_id !== userId){
         return res.status(403).json({
-            message: "Unauthorized",
+            message: "Forbidden",
             statusCode: 403
         })
     }
