@@ -66,10 +66,6 @@ const checkBookingOwner = (booking, userId) => {
 }
 
 
-const pastBooking = (booking) => {
-
-}
-
 //Get all of the Current User's Bookings
 router.get('/current', requireAuth, async(req, res) => {
     const userId = req.user.id
@@ -128,14 +124,12 @@ router.put('/:bookingId', requireAuth, validateBookingDates, async(req, res) => 
             // console.log('THERE IS A CONFLICT')
             let errmsg = {}
             if (startconflict){
-                console.log('START DATE IS WRONG')
                 errmsg['startDate'] = "Start date conflicts with an existing booking"
             }
 
             if (endconflict){
                 errmsg['endDate'] = "End date conflicts with an existing booking"
             }
-            console.log('ERROR MESSAGE', errmsg)
             return res.status(403).json({
                 message: 'Sorry, this spot is already booked for the specified dates',
                 statusCode: 403,

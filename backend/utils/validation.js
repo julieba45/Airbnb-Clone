@@ -44,7 +44,7 @@ const handleValidationErrors = (req, _res, next) => {
 
 
   const validateStartDate = async(spotId, startDate)=> {
-    console.log("START")
+    // console.log("START")
     const bookings = await Booking.findAll({
       where: {
         spotId,
