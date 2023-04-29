@@ -41,7 +41,7 @@ export const restoreUser = () => async dispatch => {
 
 
 export const signup = (user) => async (dispatch) => {
-  console.log("IN STORE-SESSION USER". user)
+  console.log("IN STORE-SESSION USER", user)
   const { username, firstName, lastName, email, password } = user;
   const response = await csrfFetch("/api/users", {
     method: "POST",
@@ -60,6 +60,13 @@ export const signup = (user) => async (dispatch) => {
   return response;
 };
 
+export const logout = () => async (dispatch) => {
+  const response = await csrfFetch('/api/session', {
+    method: 'DELETE',
+  });
+  dispatch(removeUser());
+  return response;
+};
 
 
 const initialState = { user: null };
