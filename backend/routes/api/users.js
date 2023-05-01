@@ -39,8 +39,9 @@ router.post(
     '/',
     validateSignup,
     async (req, res) => {
+      // console.log("---------------I MADE IT TO THE CORRECT ROUTE---------------")
       const { firstName, lastName, email, password, username } = req.body;
-
+        // console.log("---REQ BODY INFO---", email, password, username, firstName, lastName)
         const existingUserWithEmail = await User.findOne({ where: { email } });
         const existingUserWithUsername = await User.findOne({ where: { username } });
         if (existingUserWithEmail) {
@@ -60,16 +61,17 @@ router.post(
         }
 
         const user = await User.signup({ firstName, lastName, email, username, password });
-        // const token = await setTokenCookie(res, user);
+    //  console.log("--OBJ SENDING BACK TO THUNK--", user.toJSON())
       await setTokenCookie(res, user);
 
       return res.json({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        username: user.username,
-        token: ''
+        // id: user.id,
+        // firstName: user.firstName,
+        // lastName: user.lastName,
+        // email: user.email,
+        // username: user.username,
+        // token: ''
+        user
       });
     }
 );
