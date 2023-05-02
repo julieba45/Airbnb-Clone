@@ -117,8 +117,9 @@ const setPreviewImage = (images) => {
     }
     return 'no spot preview image found'
 }
-//Get all Spots
+//Get all Spots (/api/spots?page=1&size=20)
 router.get('/', validateQueryParams, async(req, res)=> {
+    console.log('-----------IM IN MY ROUTE FOR GET ALL SPOTS--------')
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 20;
     const offset = (page -1) * size;
