@@ -41,6 +41,9 @@ router.post(
     }
 );
 
+//Log In demo-user
+// router.post('/demo', )
+
 // Log out
 router.delete(
     '/',
