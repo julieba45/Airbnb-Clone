@@ -11,19 +11,36 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  // const [demouser, demopassword] =
 
-  const handleSubmit = (e) => {
+  // useEffect(() => {
+  //   console.log('ERRPRS OBJECT', errors); // Log the updated errors object whenever it changes
+  // }, [errors]);
+
+  const handleSubmit = (e, demoCredential, demoPassword) => {
+    console.log('HERE', credential, password)
     e.preventDefault();
     setErrors({});
-    return dispatch(sessionActions.login({ credential, password }))
+    const creds = demoCredential || credential
+    const pass = demoPassword || password
+    return dispatch(sessionActions.login({ credential: creds, password: pass }))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
+        if(res.status === 401){
+          setErrors({...errors, credential:"The provided credentials were invalid"})
+        } else {
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
         }
       });
   };
+
+  const handleDemoLogin = async (e) => {
+    e.preventDefault();
+    await handleSubmit(e, 'Demouser', 'password');
+  }
 
   return (
     <>
@@ -50,8 +67,9 @@ function LoginFormModal() {
         {errors.credential && (
           <p>{errors.credential}</p>
         )}
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={credential.length < 4 || password.length < 6}>Log In</button>
       </form>
+      <button onClick={handleDemoLogin}>Log in as Demo User</button>
     </>
   );
 }
