@@ -19,7 +19,7 @@ const GetDetailsSpot = () => {
     }, [dispatch])
 
     if(!spot){
-        return <div>Loading...</div>
+        return <div>Sorry there is no Spot here</div>
     }
     return (
         <div>
