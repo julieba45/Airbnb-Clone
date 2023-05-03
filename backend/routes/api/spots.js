@@ -117,8 +117,9 @@ const setPreviewImage = (images) => {
     }
     return 'no spot preview image found'
 }
-//Get all Spots
+//Get all Spots (/api/spots?page=1&size=20)
 router.get('/', validateQueryParams, async(req, res)=> {
+    console.log('-----------IM IN MY ROUTE FOR GET ALL SPOTS--------')
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 20;
     const offset = (page -1) * size;
@@ -198,6 +199,28 @@ router.post('/', requireAuth, validateSpots, async(req,res) => {
 })
 
 
+// router.post('/', requireAuth, validateSpots, async(req,res) => {
+//     const ownerId = req.user.id;
+//     const {address, city, state, country, lat, lng, name, description, price} = req.body
+//     try{
+//         const newSpot = await Spot.create({
+//             owner_id: ownerId,
+//             address,
+//             city,
+//             state,
+//             country,
+//             lat,
+//             lng,
+//             name,
+//             description,
+//             price
+//         });
+//     res.json(newSpot)
+
+//     } catch(err){
+//         handleSequelizeValidationError(err, res)
+//     }
+// })
 
 router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, next) => {
     const spotId = req.params.spotId;
@@ -282,6 +305,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
   })
   //Get details of a Spot from an id
   router.get('/:spotId', async(req, res) => {
+    console.log('----HEY YOU ARE HITTING THIS ROUTER HANDLER HERE------')
     const spotId = req.params.spotId
     // console.log('here', spotId)
     const spots = await Spot.findAll({
