@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const GetAllSpots = () => {
-    console.log('IN MY COMPONENT')
+
     const dispatch = useDispatch();
     const spots = useSelector((state) => state.spots.spots);
     const spotArray = spots ? Object.values(spots) : null;
@@ -18,32 +18,33 @@ const GetAllSpots = () => {
     return (
         <div>
             <h1>All Spots</h1>
-            <ul>
-                {spotArray &&
-                spotArray.map((spot) => (
-                    <li key={spot.id}>
-                        <div className='description'>
-                            <div>
-                            {/* <img src={spot.previewImage} alt={spot.name} /> */}
+            {spotArray && spotArray.length > 0 ? (
+                <ul>
+                    {spotArray.map((spot) => (
+                        <li key={spot.id}>
+                            <div className='description'>
+                                <div>
+                                    {spot.previewImage && spot.previewImage !== 'no spot preview image found' ? (
+                                        <img src={spot.previewImage} alt={spot.name} />
+                                    ) : (
+                                        // You can render alternative content or a placeholder image here
+                                        <div>No preview image available</div>
+                                    )}
+                                </div>
+                                <div>
+                                    <NavLink to={`/spots/${spot.id}`}>{spot.city}</NavLink>
+                                </div>
+                                <div>${spot.price}</div>
+                                <div>{spot.avgRating} stars</div>
                             </div>
-                            <div>
-                                <NavLink to={`/spots/${spot.id}`}>
-                                {spot.city}
-                                </NavLink>
-
-                            </div>
-                            <div>
-                                ${spot.price}
-                            </div>
-                            <div>
-                                {spot.avgRating} stars
-                            </div>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <div>No spots available</div>
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default GetAllSpots

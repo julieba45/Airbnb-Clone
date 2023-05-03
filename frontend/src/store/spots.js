@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf";
+
 
 // action types
 const GET_ALL_SPOTS = 'spots/GET_ALL_SPOTS';
@@ -11,8 +13,16 @@ const getAllSpots = (spots) => ({
     type: GET_ALL_SPOTS,
     spots
 });
-const getOneSpot = (spot) => ({ type: GET_DETAILS_SPOT, spot });
-// const createSpot = (spot) => ({ type: CREATE_SPOT, spot });
+
+const setCurrentSpot = (spot) => ({
+  type: GET_DETAILS_SPOT,
+  spot
+});
+
+const createSpot = (spot) => ({
+  type: CREATE_SPOT,
+  spot
+});
 // const updateSpot = (spot) => ({ type: UPDATE_SPOT, spot });
 // const deleteSpot = (spotId) => ({ type: DELETE_SPOT, spotId });
 
@@ -34,16 +44,33 @@ export const fetchAllSpots = () => async (dispatch) => {
 
   export const fetchSpot = (id) => async (dispatch) => {
     // fetch a single spot by ID from the backend
-    const response = await fetch(`/api/spots/${id}`)
+    const response = await csrfFetch(`/api/spots/${id}`)
     // console.log('---SPOTS ID RESPONSE----',response)
     if(response.ok){
       const spot = await response.json();
-      dispatch(getOneSpot(spot))
+      console.log('SPOT DETAILS:',spot)
+      dispatch(setCurrentSpot(spot))
     }
   };
 
   export const addSpot = (spot) => async (dispatch) => {
     // add a spot to the backend
+    console.log('INSIDE OF ADDSPOT')
+    const response = await fetch(`/api/spots`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(spot)
+    })
+     console.log('CREATE SPOT RESPONSE',response)
+    if(response.ok){
+
+      const newspot = await response.json();
+      console.log("---------Response SPOT", newspot)
+      dispatch(createSpot(newspot))
+      return newspot
+    }
   };
 
   export const editSpot = (spot) => async (dispatch) => {
@@ -88,11 +115,16 @@ export const fetchAllSpots = () => async (dispatch) => {
         // return { ...state, spots: action.spots };
       case GET_DETAILS_SPOT:
         // handle getting a single spot
-        console.log('IM IN GETSPOT CASE')
+      console.log('GET DETAILS SPOT: ',{...state, currentSpot: action.spot})
         return { ...state, currentSpot: action.spot };
       case CREATE_SPOT:
+        // console.log('IM IN CREATESPOT CASE')
         // handle creating a spot
-        return { ...state, spots: { ...state.spots, [action.spot.id]: action.spot } };
+        return {
+          ...state,
+          spots: { ...state.spots, [action.spot.id]: action.spot },
+          currentSpot: action.spot,
+         };
       case UPDATE_SPOT:
         // handle updating a spot
         return { ...state, spots: { ...state.spots, [action.spot.id]: action.spot } };

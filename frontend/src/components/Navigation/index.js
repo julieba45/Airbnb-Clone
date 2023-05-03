@@ -42,6 +42,9 @@ function Navigation({ isLoaded }) {
           <NavLink exact to="/">Home</NavLink>
         </div>
         <div className="navbar-menu">
+          {isLoaded && sessionUser && (
+            <NavLink to="/spots/new">Create a New Spot</NavLink>
+          )}
           {isLoaded && <ProfileButton user={sessionUser} />}
         </div>
       </div>

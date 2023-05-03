@@ -4,8 +4,10 @@ import { Route, Switch } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import * as spotActions from "./store/spots"
-import SpotBrowser from "./components/SpotBrowser";
+// import SpotBrowser from "./components/SpotBrowser";
 import GetAllSpots from "./components/SpotBrowser/GetAllSpots";
+import GetDetailsSpot from "./components/SpotBrowser/GetDetailsSpot";
+import CreateSpot from "./components/CreateSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -22,11 +24,14 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route
-            path={["/", "/spots", "/spots/:id"]}
-            exact
-          >
-            <SpotBrowser />
+          <Route exact path={["/", "/spots"]}>
+            <GetAllSpots />
+          </Route>
+          <Route exact path="/spots/new">
+          <CreateSpot />
+          </Route>
+          <Route exact path="/spots/:id">
+            <GetDetailsSpot />
           </Route>
         </Switch>
       )}
