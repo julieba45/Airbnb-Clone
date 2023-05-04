@@ -39,7 +39,7 @@ function LoginFormModal() {
 
   const handleDemoLogin = async (e) => {
     e.preventDefault();
-    await handleSubmit(e, 'Demouser', 'password');
+    await handleSubmit(e, 'password', 'password');
   }
 
   return (

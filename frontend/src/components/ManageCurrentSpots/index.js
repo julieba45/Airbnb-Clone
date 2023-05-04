@@ -2,21 +2,32 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { editSpot, fetchAllSpots, fetchCurrentSpots } from '../../store/spots';
+import { fetchCurrentSpots } from '../../store/spots';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { removeSpot } from '../../store/spots';
+import { useModal } from '../../context/Modal';
+import DeleteConfirmationModal from '../OpenDeleteModal';
 import './mcs.css'
+
 
 const GetAllCurrentSpots = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentSpots = useSelector((state) => state.spots.spotsCurrentUser);
+    const { setModalContent, closeModal} = useModal();
+
+    const openDeleteConfirmation = (spotId) => {
+      setModalContent(
+        <DeleteConfirmationModal spotId={spotId} closeModal={closeModal}/>
+      )
+    }
 
 
-    // useEffect(() => {
-    //     if (currentSpots) {
-    //         console.log('CurrentSpots in the component:', currentSpots);
-    //     }
-    // }, [currentSpots]);
+    useEffect(() => {
+        if (currentSpots) {
+            console.log('CurrentSpots in the component:', Object.values(currentSpots));
+        }
+    }, [currentSpots]);
 
     useEffect(() => {
         dispatch(fetchCurrentSpots());
@@ -43,7 +54,7 @@ const GetAllCurrentSpots = () => {
                     <div>Price: ${spot.price}</div>
                   </NavLink>
                   <button onClick={() => handleUpdateClick(spot)}>Update</button>
-                  <button>Delete</button>
+                  <button onClick={() => openDeleteConfirmation(spot.id)}>Delete</button>
                 </div>
               ))}
             </div>

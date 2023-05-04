@@ -223,6 +223,7 @@ router.post('/', requireAuth, validateSpots, async(req,res) => {
 // })
 
 router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, next) => {
+    console.log('---------I AM HITTING THE CREATE SPOTIMAGES ROUTE--------')
     const spotId = req.params.spotId;
     const userId = req.user.id;
     const { url, preview } = req.body;
@@ -588,6 +589,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
     //if the spot belongs to the user
     const spot = await Spot.findByPk(spotId)
+    console.log('INSTANCE DESTROYED', spot)
     if(!spot){
         return handleNotFoundError(res, "Spot couldn't be found")
     }

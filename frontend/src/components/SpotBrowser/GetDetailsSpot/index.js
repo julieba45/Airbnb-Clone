@@ -30,9 +30,9 @@ const GetDetailsSpot = () => {
         return <div>Sorry there is no Spot here</div>
     }
 
-    if(!spot.SpotImages.url){
+    // if(!spot.SpotImages.url){
 
-    }
+    // }
 
     const handleReserveClick = () => {
         alert("Feature coming soon");

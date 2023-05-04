@@ -23,6 +23,18 @@ module.exports = {
         description: "Place where web developers are created",
         price: 123
       },
+      {
+        owner_id: 2,
+        address: "123 Disney Lane",
+        city: "San Francisco",
+        state: "California",
+        country: "United States of America",
+        lat: 37.7645358,
+        lng: -122.4730327,
+        name: "App Academy",
+        description: "Place where web developers are created",
+        price: 123
+      },
     ], {})
     /**
      * Add seed commands here.

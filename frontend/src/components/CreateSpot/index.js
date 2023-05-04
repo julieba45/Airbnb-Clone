@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { addSpot } from "../../store/spots";
+import { addSpot, createSpotImage } from "../../store/spots";
 
 const CreateSpot = () => {
     const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const CreateSpot = () => {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [previewImageUrl, setPreviewImageUrl] = useState("");
-    const [imageUrls, setImageUrls] = useState(["", "", "", ""]);
+    const [imageUrl, setImageUrl] = useState("");
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState(false);
 
@@ -34,6 +34,11 @@ const CreateSpot = () => {
             errors.description = "Description needs 30 or more characters";
             if (!price) errors.price = "Price per night is required";
             if (!previewImageUrl) errors.previewImageUrl= "Preview Image URL is required";
+            if (!imageUrl){
+              errors.imageUrl = "Image URL is required"
+            }else if(!/\.(jpg|jpeg|png)/i.test(imageUrl)){
+              errors.imageUrl = "Image URL must end in .jpg, .jpeg or .png"
+            }
            return errors
     }
 
@@ -70,10 +75,16 @@ const CreateSpot = () => {
             const newSpot = await dispatch(addSpot(spotData))
             console.log('-------NEW SPOT FROM COMPONENT', newSpot)
             if(newSpot){
-                history.push(`/spots/${newSpot.id}`)
+              const allImageUrls = [imageUrl, previewImageUrl];
+              for(const url of allImageUrls){
+                if(url){
+                  const preview = (url === previewImageUrl);
+                  await dispatch(createSpotImage(newSpot.id, url, preview))
+                }
+              }
+              history.push(`/spots/${newSpot.id}`)
             }
         }
-
     };
 
     return (
@@ -215,10 +226,21 @@ const CreateSpot = () => {
             <input
               type="text"
               value={previewImageUrl}
-              placeholder="Price"
+              placeholder="Preview Image URL"
               onChange={(e) => setPreviewImageUrl(e.target.value)}
             />
           </label>
+          <label>
+            <input
+              type="text"
+              value={imageUrl}
+              placeholder="Image URL"
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+          </label>
+          {errors.imageUrl && (
+            <div style={{ color: "red" }}>{errors.imageUrl}</div>
+            )}
 
           <button type="submit">Submit</button>
   </form>
