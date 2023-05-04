@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSpot } from "../../../store/spots";
 import { useParams } from 'react-router-dom';
 
-console.log('up here')
 const GetDetailsSpot = () => {
     const {id} = useParams();
     const dispatch = useDispatch();

@@ -6,6 +6,7 @@ const GET_ALL_SPOTS = 'spots/GET_ALL_SPOTS';
 const GET_DETAILS_SPOT = 'spots/GET_DETAILS_SPOT';
 const CREATE_SPOT = 'spots/CREATE_SPOT';
 const UPDATE_SPOT = 'spots/UPDATE_SPOT';
+const GET_CURRENT_SPOT = 'spots/GET_CURRENT_SPOT';
 // const DELETE_SPOT = 'spots/DELETE_SPOT';
 
 //action creators
@@ -23,7 +24,14 @@ const createSpot = (spot) => ({
   type: CREATE_SPOT,
   spot
 });
-// const updateSpot = (spot) => ({ type: UPDATE_SPOT, spot });
+const updateSpot = (spot) => ({
+  type: UPDATE_SPOT,
+  spot
+});
+const getCurrentSpot = (spots) => ({
+  type: GET_CURRENT_SPOT,
+  spots
+});
 // const deleteSpot = (spotId) => ({ type: DELETE_SPOT, spotId });
 
 // thunk action creators
@@ -38,6 +46,15 @@ export const fetchAllSpots = () => async (dispatch) => {
     const spots = await response.json();
     // console.log('SPOTS RESPONSE',spots)
     dispatch(getAllSpots(spots))
+
+
+  };
+
+  export const fetchCurrentSpots = () => async (dispatch) => {
+    const response = await fetch(`/api/spots/current`)
+    const spots = await response.json();
+    // console.log('SPOTS RESPONSE',spots)
+    dispatch(getCurrentSpot(spots))
 
 
   };
@@ -63,19 +80,38 @@ export const fetchAllSpots = () => async (dispatch) => {
       },
       body: JSON.stringify(spot)
     })
-     console.log('CREATE SPOT RESPONSE',response)
+    //  console.log('CREATE SPOT RESPONSE',response)
     if(response.ok){
 
       const newspot = await response.json();
-      console.log("---------Response SPOT", newspot)
+      // console.log("---------Response SPOT", newspot)
       dispatch(createSpot(newspot))
       return newspot
     }
   };
 
-  export const editSpot = (spot) => async (dispatch) => {
+  export const editSpot = (id, spot) => async (dispatch) => {
     // update a spot in the backend
+    console.log('INSIDE OF ADDSPOT')
+    console.log('CREATE SPOT RESPONSE',spot)
+    const response = await csrfFetch(`/api/spots/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(spot)
+    })
+
+    if(response.ok){
+
+      const updatedSpot = await response.json();
+      console.log("---------Response SPOT", updatedSpot)
+      dispatch(updateSpot(updatedSpot))
+      return updatedSpot
+    }
+
   };
+
 
   export const removeSpot = (id) => async (dispatch) => {
     // remove a spot from the backend
@@ -113,9 +149,17 @@ export const fetchAllSpots = () => async (dispatch) => {
         // console.log('IN THE CASE')
         return handleGetAllSpots(state, action)
         // return { ...state, spots: action.spots };
+      case GET_CURRENT_SPOT:
+        // console.log('ACTION',action)
+        const currentSpots = {};
+        action.spots.Spots.forEach(spot => {
+          currentSpots[spot.id] = spot
+        })
+        return {...state, spotsCurrentUser: currentSpots}
+        // return { ...state, spots: action.spots };
       case GET_DETAILS_SPOT:
         // handle getting a single spot
-      console.log('GET DETAILS SPOT: ',{...state, currentSpot: action.spot})
+      // console.log('GET DETAILS SPOT: ',{...state, currentSpot: action.spot})
         return { ...state, currentSpot: action.spot };
       case CREATE_SPOT:
         // console.log('IM IN CREATESPOT CASE')
@@ -127,6 +171,7 @@ export const fetchAllSpots = () => async (dispatch) => {
          };
       case UPDATE_SPOT:
         // handle updating a spot
+        console.log('UPDATING A SPOT ACTION CASE')
         return { ...state, spots: { ...state.spots, [action.spot.id]: action.spot } };
       // case DELETE_SPOT:
         // handle deleting a spot

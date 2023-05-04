@@ -264,6 +264,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
   ////////////////////////////////DONT FORGET TO REFACTOR THESE THEY ARE MESSSSYYY!!!!
   //Get all Spots owned by the Current User
   router.get('/current', requireAuth, async(req, res) => {
+    // console.log('------I AM BEING HIT------')
     const userId = req.user.id
     const spots = await Spot.findAll({
         where: {
