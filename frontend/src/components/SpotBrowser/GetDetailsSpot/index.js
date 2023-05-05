@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpot } from "../../../store/spots";
+import { fetchReviewsBySpotId } from "../../../store/reviews";
 import { useParams } from 'react-router-dom';
 
 const GetDetailsSpot = () => {
@@ -8,21 +9,27 @@ const GetDetailsSpot = () => {
     const dispatch = useDispatch();
     console.log("id from useParams:", id);
 
-    // console.log("useParams", useParams());
     const spot = useSelector((state) => {
-        // console.log('HEYYYY Spot ID:', state.spots.currentSpot)
        return state.spots.currentSpot
     })
 
-    useEffect(() => {
-        if (spot) {
-            console.log('Spot Images:', spot.SpotImages);
-        }
-    }, [spot]);
+    const reviews = useSelector((state) => {
+        console.log('IN THE USESELECTPR', state.reviews.reviewsBySpotId[id])
+        return state.reviews.reviewsBySpotId[id]
+    })
+
+
+
+    // useEffect(() => {
+    //     if (spot) {
+    //         console.log('Spot Images:', spot.SpotImages);
+    //     }
+    // }, [spot]);
 
 
     useEffect(() => {
-        dispatch(fetchSpot(id))
+        dispatch(fetchSpot(id));
+        dispatch(fetchReviewsBySpotId(id))
     }, [dispatch, id])
 
 
@@ -30,14 +37,61 @@ const GetDetailsSpot = () => {
         return <div>Sorry there is no Spot here</div>
     }
 
-    // if(!spot.SpotImages.url){
-
-    // }
 
     const handleReserveClick = () => {
         alert("Feature coming soon");
     };
 
+    const renderRating = () => {
+        if(spot.numReviews === 0){
+            return <span>New</span>
+        }else {
+            return <span>{spot.avgStarRating.toFixed(2)}</span>
+        }
+    }
+
+    const renderReviewsCount = () => {
+        if(spot.numReviews === 0){
+            return null
+        } else if(spot.numReviews === 1){
+            return <span>1 Review</span>
+        }else {
+            return <span>{spot.numReviews}</span>
+        }
+    }
+
+    const renderReviews = () => {
+        if(reviews === undefined){
+            return <div>Loading reviews...</div>
+        }
+        if(!reviews || reviews.length === 0){
+            if(null/**userLoggedin && userisnotowner */){
+                return <div>Be the first to post a review!</div>
+            }else{
+                return <div>No reviews have been posted yet.</div>
+            }
+        }
+        return (
+            <div>
+                <h2>Reviews</h2>
+                {reviews
+                    .slice()
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .map((review) => (
+                        <div key={review.id}>
+                        <p>
+                            {review.User.firstName} -{" "}
+                            {new Date(review.createdAt).toLocaleString("default", {
+                            month: "long",
+                            year: "numeric",
+                            })}
+                        </p>
+                        <p>{review.review}</p>
+                        </div>
+                    ))}
+            </div>
+        )
+    }
     return (
         <div>
             <h1>{spot.name}</h1>
@@ -58,10 +112,16 @@ const GetDetailsSpot = () => {
                 <div>No images available for this spot</div>
             )}
             </div>
-            <p>Hosted</p>
+            <p>Hosted by {spot.id}</p>
             <div>
                 <p>{spot.price} per night</p>
+                <p>
+                    <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
+                </p>
                 <button onClick={handleReserveClick}>Reserve</button>
+            </div>
+            <div>
+                {renderReviews()}
             </div>
         </div>
     )

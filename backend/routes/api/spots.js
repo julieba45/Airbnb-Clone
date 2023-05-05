@@ -460,6 +460,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
   //Get all Reviews by a Spot's id
   router.get('/:spotId/reviews', async(req,res) => {
+    console.log('-----------I AM IN THE REVIEW DETAILS ROUTE HANDLER-------')
     const spotId = req.params.spotId;
         const reviews = await Review.findAll({
             where: {spotId},

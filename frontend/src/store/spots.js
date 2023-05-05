@@ -202,9 +202,9 @@ export const fetchAllSpots = () => async (dispatch) => {
           currentSpot: action.spot,
          };
       case ADD_SPOT_IMAGE:
-        console.log('i am hitting the spot image case')
-        console.log("--------- State", state)
-        console.log("-------ACTION IMAGE", action.image)
+        // console.log('i am hitting the spot image case')
+        // console.log("--------- State", state)
+        // console.log("-------ACTION IMAGE", action.image)
 
         return{
           ...state,
