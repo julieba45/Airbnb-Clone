@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 const GetDetailsSpot = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
-    console.log("id from useParams:", id);
+    // console.log("id from useParams:", id);
 
     const spot = useSelector((state) => {
        return state.spots.currentSpot
@@ -18,14 +18,11 @@ const GetDetailsSpot = () => {
         return state.reviews.reviewsBySpotId[id]
     })
 
-
-
     // useEffect(() => {
     //     if (spot) {
     //         console.log('Spot Images:', spot.SpotImages);
     //     }
     // }, [spot]);
-
 
     useEffect(() => {
         dispatch(fetchSpot(id));
