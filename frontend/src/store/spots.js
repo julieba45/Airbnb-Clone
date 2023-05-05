@@ -191,7 +191,7 @@ export const fetchAllSpots = () => async (dispatch) => {
         // return { ...state, spots: action.spots };
       case GET_DETAILS_SPOT:
         // handle getting a single spot
-      // console.log('GET DETAILS SPOT: ',{...state, currentSpot: action.spot})
+      console.log('GET DETAILS SPOT: ',{...state, currentSpot: action.spot})
         return { ...state, currentSpot: action.spot };
       case CREATE_SPOT:
         // console.log('IM IN CREATESPOT CASE')

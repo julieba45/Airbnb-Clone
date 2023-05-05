@@ -14,13 +14,17 @@ const GetDetailsSpot = () => {
     })
 
     const reviews = useSelector((state) => {
-        console.log('IN THE USESELECTPR', state.reviews.reviewsBySpotId[id])
+        console.log('IN THE USESELECTPR', state.reviews)
         return state.reviews.reviewsBySpotId[id]
     })
 
+    const userId = useSelector((state) => {
+        return state.session.user.id
+    })
+
     // useEffect(() => {
-    //     if (spot) {
-    //         console.log('Spot Images:', spot.SpotImages);
+    //     if (userId) {
+    //         console.log('currentuser:', userId);
     //     }
     // }, [spot]);
 
@@ -58,11 +62,8 @@ const GetDetailsSpot = () => {
     }
 
     const renderReviews = () => {
-        if(reviews === undefined){
-            return <div>Loading reviews...</div>
-        }
         if(!reviews || reviews.length === 0){
-            if(null/**userLoggedin && userisnotowner */){
+            if((spot.owner_id !== userId) && (userId)){
                 return <div>Be the first to post a review!</div>
             }else{
                 return <div>No reviews have been posted yet.</div>

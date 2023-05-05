@@ -330,6 +330,8 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         ]
     })
 
+
+
     if(!spots || spots.length == 0){
         return res.status(404).json({
             message: "Spot couldn't be found",
@@ -339,6 +341,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
     let spotList = [];
     spots.forEach(spot => {
+        console.log('--------SPOTS', spot.toJSON())
         spotList.push(spot.toJSON())
     })
 
@@ -351,7 +354,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         if(!spot.avgStarRating){
             spot.avgStarRating = 'no reviews'
         }
-        spot.numReviews = sum
+        spot.numReviews = spot.Reviews.length
         delete spot.Reviews
     })
 
@@ -476,7 +479,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
             ]
         })
         if (reviews.length === 0) {
-            return handleNotFoundError(res, "Spot couldn't be found")
+            return handleNotFoundError(res, "Review couldn't be found")
         }
         res.json({
             Reviews: reviews

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { fetchCurrentSpots } from '../../store/spots';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import { removeSpot } from '../../store/spots';
+// import { removeSpot } from '../../store/spots';
 import { useModal } from '../../context/Modal';
 import DeleteConfirmationModal from '../OpenDeleteModal';
 import './mcs.css'
