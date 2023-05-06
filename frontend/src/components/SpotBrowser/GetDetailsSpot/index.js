@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpot } from "../../../store/spots";
-import { fetchReviewsBySpotId } from "../../../store/reviews";
+import { fetchReviewsBySpotId, removeReview } from "../../../store/reviews";
 import { useParams } from 'react-router-dom';
 import ReviewConfirmationalModal from "../../OpenReviewModal";
 import { useModal } from "../../../context/Modal";
+import DeleteReviewModal from "../../OpenDeleteReviewModal";
 
 const GetDetailsSpot = () => {
     const {id} = useParams();
@@ -17,10 +18,9 @@ const GetDetailsSpot = () => {
     })
 
     const reviews = useSelector((state) => {
-        // console.log('IN THE USESELECTPR', state.reviews)
+        console.log('IN THE USESELECTPR', state.reviews.reviewsBySpotId)
         return state.reviews.reviewsBySpotId[id]
     })
-
 
 
     const userId = useSelector((state) => {
@@ -45,8 +45,17 @@ const GetDetailsSpot = () => {
         dispatch(fetchReviewsBySpotId(id))
     }
 
+    const deleteReview = (reviewId) => {
+        dispatch(removeReview(reviewId))
+    }
+
     useEffect(() => {
         dispatch(fetchSpot(id));
+    }, [dispatch, id])
+
+
+    useEffect(() => {
+        dispatch(fetchReviewsBySpotId(id))
     }, [dispatch, id])
 
 
@@ -79,6 +88,7 @@ const GetDetailsSpot = () => {
     }
 
     const renderReviews = () => {
+
         if(!reviews || reviews.length === 0){
             if((spot.owner_id !== userId) && (userId)){
                 return <div>Be the first to post a review!</div>
@@ -86,6 +96,8 @@ const GetDetailsSpot = () => {
                 return <div>No reviews have been posted yet.</div>
             }
         }
+
+
         return (
             <div>
                 <h2>Reviews</h2>
@@ -102,11 +114,27 @@ const GetDetailsSpot = () => {
                             })}
                         </p>
                         <p>{review.review}</p>
+
+                        {review.User.id === userId && (
+                            <button
+                                onClick={() => {
+                                    setModalContent(
+                                        <DeleteReviewModal
+                                            closeModal={closeModal}
+                                            deleteRevew={() => deleteReview(review.id)}
+                                        />
+                                    )
+                                }}
+                            >
+                            Delete
+                            </button>
+                        )}
                         </div>
                     ))}
             </div>
-        )
-    }
+        );
+    };
+
     return (
         <div>
             <h1>{spot.name}</h1>

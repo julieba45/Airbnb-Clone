@@ -1,7 +1,7 @@
 
 import React, {useState} from "react";
 import { useDispatch } from "react-redux";
-import { createReviewBySpotId, fetchReviewsBySpotId } from "../../store/reviews";
+import { createReviewBySpotId} from "../../store/reviews";
 
 const ReviewConfirmationalModal = ({spotId, closeModal, updateReviews}) => {
     const dispatch = useDispatch()
