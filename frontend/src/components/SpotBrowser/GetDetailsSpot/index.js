@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSpot } from "../../../store/spots";
 import { fetchReviewsBySpotId } from "../../../store/reviews";
 import { useParams } from 'react-router-dom';
+import ReviewConfirmationalModal from "../../OpenReviewModal";
+import { useModal } from "../../../context/Modal";
 
 const GetDetailsSpot = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
+    const {setModalContent, closeModal} = useModal();
     // console.log("id from useParams:", id);
 
     const spot = useSelector((state) => {
@@ -14,13 +17,23 @@ const GetDetailsSpot = () => {
     })
 
     const reviews = useSelector((state) => {
-        console.log('IN THE USESELECTPR', state.reviews)
+        // console.log('IN THE USESELECTPR', state.reviews)
         return state.reviews.reviewsBySpotId[id]
     })
 
+
+
     const userId = useSelector((state) => {
-        return state.session.user.id
+        if(state.session.user){
+            return state.session.user.id
+        }
     })
+
+    const openReviewModal = (spotId) => {
+        setModalContent(
+            <ReviewConfirmationalModal spotId={spotId} closeModal={closeModal} updateReviews={updateReviews}/>
+        )
+    }
 
     // useEffect(() => {
     //     if (userId) {
@@ -28,10 +41,14 @@ const GetDetailsSpot = () => {
     //     }
     // }, [spot]);
 
+    const updateReviews = () => {
+        dispatch(fetchReviewsBySpotId(id))
+    }
+
     useEffect(() => {
         dispatch(fetchSpot(id));
-        dispatch(fetchReviewsBySpotId(id))
     }, [dispatch, id])
+
 
 
     if(!spot){
@@ -44,7 +61,7 @@ const GetDetailsSpot = () => {
     };
 
     const renderRating = () => {
-        if(spot.numReviews === 0){
+        if(!spot.numReviews){
             return <span>New</span>
         }else {
             return <span>{spot.avgStarRating.toFixed(2)}</span>
@@ -117,6 +134,11 @@ const GetDetailsSpot = () => {
                     <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
                 </p>
                 <button onClick={handleReserveClick}>Reserve</button>
+            </div>
+            <div>
+                {userId && (userId !== spot.owner_id) &&(
+                     <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
+                )}
             </div>
             <div>
                 {renderReviews()}

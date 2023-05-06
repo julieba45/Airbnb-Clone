@@ -126,19 +126,19 @@ router.get('/', validateQueryParams, async(req, res)=> {
     const filtered = {}
     if(req.query.minLat && req.query.maxLat){
         filtered.lat = {[Op.between]: [req.query.minLat, req.query.maxLat] }
-        console.log('1')
+
     }
     if(req.query.minLng && req.query.maxLng){
         filtered.lng = {[Op.between]: [req.query.minLng, req.query.maxLng]}
-        console.log('2')
+
     }
     if(req.query.minPrice){
         filtered.price = {[Op.gte]: req.query.minPrice}
-        console.log('3')
+
     }
     if(req.query.maxPrice){
         filtered.price = {...filtered.price, [Op.lte]: req.query.maxPrice}
-        console.log('4')
+
     }
 
     const spots = await Spot.findAll({
@@ -307,7 +307,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
   })
   //Get details of a Spot from an id
   router.get('/:spotId', async(req, res) => {
-    console.log('----HEY YOU ARE HITTING THIS ROUTER HANDLER HERE------')
+    console.log('----GET DETAILS BY SPOTID------')
     const spotId = req.params.spotId
     // console.log('here', spotId)
     const spots = await Spot.findAll({
@@ -341,7 +341,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
     let spotList = [];
     spots.forEach(spot => {
-        console.log('--------SPOTS', spot.toJSON())
+        // console.log('--------SPOTS', spot.toJSON())
         spotList.push(spot.toJSON())
     })
 
@@ -439,7 +439,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
         })
         //Error response: Review from the current user already exists for the Spot
         if(existingReview){
-            return res.status(404).json({
+            return res.status(403).json({
                 message: 'User already has a review for this spot',
                 statusCode: 403
             })
@@ -508,12 +508,12 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     // Check booking conflict
     const startconflict = await validateStartDate(spotId, startDate);
     const endconflict = await validateEndDate(spotId, endDate);
-    console.log("START CHECKING")
+
     if((startconflict==true)|| (endconflict==true)){
-        console.log('THERE IS A CONFLICT')
+
         let errmsg = {}
         if (startconflict){
-            console.log('START DATE IS WRONG')
+
             errmsg['startDate'] = "Start date conflicts with an existing booking"
         }
 
@@ -554,7 +554,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     const isOwner = spot.owner_id === userId
 
     let bookings
-    console.log(isOwner, spot.owner_id, userId, 'FLAD')
+    // console.log(isOwner, spot.owner_id, userId, 'FLAD')
     if(isOwner){
         bookings = await Booking.findAll({
             where: {
@@ -578,7 +578,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
     const bookingList = [];
     bookings.forEach(booking => {
         const bookingJson = booking.toJSON()
-        console.log('FLAG', bookingJson)
+        // console.log('FLAG', bookingJson)
 
         bookingList.push(bookingJson)
     })
@@ -593,7 +593,7 @@ router.post('/:spotId/images', requireAuth, validateSpotImages, async(req, res, 
 
     //if the spot belongs to the user
     const spot = await Spot.findByPk(spotId)
-    console.log('INSTANCE DESTROYED', spot)
+    // console.log('INSTANCE DESTROYED', spot)
     if(!spot){
         return handleNotFoundError(res, "Spot couldn't be found")
     }
