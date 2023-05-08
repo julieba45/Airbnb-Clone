@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllSpots } from '../../../store/spots'
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import './spottiles.css'
 
 const GetAllSpots = () => {
 
@@ -19,8 +20,9 @@ const GetAllSpots = () => {
         <div>
             <h1>All Spots</h1>
             {spotArray && spotArray.length > 0 ? (
-                <ul>
+                <div  className='spot-grid'>
                     {spotArray.map((spot) => (
+                        <NavLink to={`/spots/${spot.id}`} key={spot.id} className="spot-card">
                         <li key={spot.id}>
                             <div className='description'>
                                 <div>
@@ -31,15 +33,14 @@ const GetAllSpots = () => {
                                         <div>No preview image available</div>
                                     )}
                                 </div>
-                                <div>
-                                    <NavLink to={`/spots/${spot.id}`}>{spot.city}</NavLink>
-                                </div>
-                                <div>${spot.price}</div>
-                                <div>{spot.avgRating} stars</div>
+                                <h3>{spot.city}</h3>
+                                <p>${spot.price}</p>
+                                <p>{spot.avgRating} stars</p>
                             </div>
                         </li>
+                        </NavLink>
                     ))}
-                </ul>
+                </div>
             ) : (
                 <div>No spots available</div>
             )}

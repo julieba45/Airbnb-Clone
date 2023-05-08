@@ -31,6 +31,7 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
+import logo from '../../../src/assets/airbnb_icon.png'
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
@@ -39,7 +40,9 @@ function Navigation({ isLoaded }) {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <NavLink exact to="/">Home</NavLink>
+          <NavLink exact to="/">
+            <img src={logo} alt="Logo" className='logo-image'/>
+          </NavLink>
         </div>
         <div className="navbar-menu">
           {isLoaded && sessionUser && (

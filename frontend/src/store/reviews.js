@@ -45,7 +45,7 @@ export const createReviewBySpotId = (spotId, review) => async(dispatch) => {
         dispatch(createReview(newreview))
         return newreview
     }else {
-        console.log('------------RESPONSE IS NOT OK')
+        // console.log('------------RESPONSE IS NOT OK')
         if(response.status === 403){
             throw { message: "User already has a review for this spot" };
         } else {

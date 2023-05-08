@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
+import { useEffect } from "react";
 import * as sessionActions from "../../store/session";
 import "./SignupForm.css";
 
@@ -13,7 +14,27 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [isDisabled, setIsDisabled] = useState(true);
   const { closeModal } = useModal();
+
+  useEffect(() => {
+    const areFieldsEmpty = !email || !username || !firstName || !lastName || !password || !confirmPassword;
+    const isUsernameTooShort = username.length < 4;
+    const isPasswordTooShort = password.length < 6;
+    const isConfirmPasswordMismatch = password !== confirmPassword;
+
+    setIsDisabled(areFieldsEmpty || isUsernameTooShort || isPasswordTooShort || isConfirmPasswordMismatch);
+  }, [email, username, firstName, lastName, password, confirmPassword]);
+
+  const updateErrors = (field) => {
+    if (errors[field]) {
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +63,7 @@ function SignupFormModal() {
   };
 
   return (
-    <>
+    <div className="SignUpFormModal">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -50,7 +71,11 @@ function SignupFormModal() {
           <input
             type="text"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              updateErrors("email")
+            }}
             required
           />
         </label>
@@ -60,7 +85,11 @@ function SignupFormModal() {
           <input
             type="text"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="username"
+            onChange={(e) => {
+              setUsername(e.target.value)
+              updateErrors("username")
+            }}
             required
           />
         </label>
@@ -70,7 +99,11 @@ function SignupFormModal() {
           <input
             type="text"
             value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="First name"
+            onChange={(e) => {
+              setFirstName(e.target.value)
+              updateErrors("firstName")
+            }}
             required
           />
         </label>
@@ -80,7 +113,11 @@ function SignupFormModal() {
           <input
             type="text"
             value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Last name"
+            onChange={(e) => {
+              setLastName(e.target.value)
+              updateErrors("lastName")
+            }}
             required
           />
         </label>
@@ -89,8 +126,12 @@ function SignupFormModal() {
           Password
           <input
             type="password"
+            placeholder="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              updateErrors("password")
+            }}
             required
           />
         </label>
@@ -100,16 +141,28 @@ function SignupFormModal() {
           <input
             type="password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm Password"
+            onChange={(e) => {
+              setConfirmPassword(e.target.value)
+              if (e.target.value !== password) {
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  confirmPassword:
+                  "passwords must match"
+                }))
+              } else {
+                updateErrors('confirmPassword')
+              }
+            }}
             required
           />
         </label>
         {errors.confirmPassword && (
           <p>{errors.confirmPassword}</p>
         )}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={isDisabled}>Sign Up</button>
       </form>
-    </>
+    </div>
   );
 }
 
