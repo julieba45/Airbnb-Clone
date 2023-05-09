@@ -75,12 +75,11 @@ const CreateSpot = () => {
                 description,
                 price
             }
-            console.log('SPOTDATA', spotData)
+
             const newSpot = await dispatch(addSpot(spotData))
-            console.log('-------NEW SPOT FROM COMPONENT', newSpot)
             if(newSpot){
               const allImageUrls = [imageUrl, imageUrl2, imageUrl3, imageUrl4,previewImageUrl];
-              await console.log("----------URL LIST", allImageUrls)
+              // await console.log("----------URL LIST", allImageUrls)
               for(const url of allImageUrls){
                 if(url){
                   const preview = (url === previewImageUrl);
