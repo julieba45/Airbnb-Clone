@@ -79,10 +79,12 @@ const CreateSpot = () => {
             const newSpot = await dispatch(addSpot(spotData))
             console.log('-------NEW SPOT FROM COMPONENT', newSpot)
             if(newSpot){
-              const allImageUrls = [imageUrl, previewImageUrl];
+              const allImageUrls = [imageUrl, imageUrl2, imageUrl3, imageUrl4,previewImageUrl];
+              await console.log("----------URL LIST", allImageUrls)
               for(const url of allImageUrls){
                 if(url){
                   const preview = (url === previewImageUrl);
+                  await console.log('----------CREATE SPOT IMAGE', url)
                   await dispatch(createSpotImage(newSpot.id, url, preview))
                 }
               }

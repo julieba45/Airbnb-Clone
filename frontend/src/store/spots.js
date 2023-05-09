@@ -102,6 +102,7 @@ export const fetchAllSpots = () => async (dispatch) => {
 
   export const createSpotImage = (spotId, imageUrl, preview) => async (dispatch) => {
     // console.log('IN THE THUNK ACTION CREATOR CREATESPOTIMAGE')
+    console.log("-----------------ADD THIS IMAGE", imageUrl)
     const response = await csrfFetch(`/api/spots/${spotId}/images`, {
       method: 'POST',
       headers: {
@@ -112,6 +113,8 @@ export const fetchAllSpots = () => async (dispatch) => {
     // console.log('RESPONSE:',response)
     if(response.ok){
       const image = await response.json();
+      console.log("-------SPOTID", spotId)
+      console.log("----------IMAGE", image)
       dispatch(addSpotImage(spotId, image))
       return image
     }
@@ -202,10 +205,21 @@ export const fetchAllSpots = () => async (dispatch) => {
       case ADD_SPOT_IMAGE:
         // console.log('i am hitting the spot image case')
         // console.log("--------- State", state)
-        // console.log("-------ACTION IMAGE", action.image)
-
+        // console.log("-------ACTION IMAGE", action)
+        // const updatedSpot = {
+        //   ...state.spots[action.spotId],
+        //   SpotImages: [...state.spots[action.spotId].SpotImages, action.image]
+        // };
+        // return{
+        //   ...state,
+        //   spots: {
+        //     ...state.spots,
+        //     [action.spotId]: updatedSpot
+        //   }
+        console.log("----------OLDSTATE", state)
+        console.log("-----------ACTION", action)
         return{
-          ...state,
+          ...state.spots,
           [action.spotId]: {
             ...state[action.spotId],
             // Images: [...state.spots[action.spotId].Images, action.image]
