@@ -1,0 +1,124 @@
+.container {
+    /* display: grid; */
+    /* grid-template-areas:
+      "content priceDetails"
+      "content priceDetails"; */
+    display: flex;
+    /* grid-template-columns: 3fr 1fr; */
+    flex-direction: column;
+    /* grid-gap: 20px; */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .content {
+    /* grid-area: content; */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .location {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .imageContainer {
+    display: grid;
+    grid-template-areas:
+      "largeImage smallImages"
+      "largeImage smallImages";
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .largeImage {
+    grid-area: largeImage;
+  }
+
+  .smallImages {
+    grid-area: smallImages;
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 10px;
+  }
+
+  .imageContainer img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .host {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .priceDetails {
+    grid-area: priceDetails;
+    border-left: 1px solid #ccc;
+    padding-left: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.priceDetails h4 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .priceDetails .rating {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .priceDetails .rating i {
+    color: #ff385c;
+  }
+
+  .reserveBtn {
+    background-color: #ff385c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .reviews {
+    margin-top: 20px;
+  }
+
+  .review {
+    margin-bottom: 20px;
+  }
+
+  .review-info {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .review-text {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
