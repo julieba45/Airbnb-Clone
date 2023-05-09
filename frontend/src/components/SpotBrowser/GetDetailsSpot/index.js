@@ -157,7 +157,7 @@ const GetDetailsSpot = () => {
                         <img src={spot.SpotImages[0].url} alt={`Spot image 1`} />
                     </div>
                     <div className={styles.smallImages}>
-                        {spot.SpotImages.slice(1).map((obj, index) => (
+                        {spot.SpotImages.slice(1, 5).map((obj, index) => (
                             <img key={index} src={obj.url} alt={`Spot image ${"index + 2"}`} />
                         ))}
                     </div>
@@ -168,6 +168,15 @@ const GetDetailsSpot = () => {
             </div>
             <p className={styles.host}>Hosted by {spot.id}</p>
 
+
+            <div className={styles.priceDetails}>
+            <h4>{spot.price} per night</h4>
+            <p className={styles.rating}>
+                <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
+            </p>
+            <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
+            </div>
+
             <div>
                 {userId && (userId !== spot.owner_id) &&(
                      <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
@@ -175,13 +184,7 @@ const GetDetailsSpot = () => {
             </div>
             <div className={styles.reviews}>{renderReviews()}</div>
         </div>
-        <div className={styles.priceDetails}>
-            <h4>{spot.price} per night</h4>
-            <p className={styles.rating}>
-                <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
-            </p>
-            <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
-        </div>
+
     </div>
     )
 }
