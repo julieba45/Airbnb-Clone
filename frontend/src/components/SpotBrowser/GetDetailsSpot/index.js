@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import ReviewConfirmationalModal from "../../OpenReviewModal";
 import { useModal } from "../../../context/Modal";
 import DeleteReviewModal from "../../OpenDeleteReviewModal";
+import styles from './GetDetailsSpot.module.css'
 
 const GetDetailsSpot = () => {
     const {id} = useParams();
@@ -18,7 +19,7 @@ const GetDetailsSpot = () => {
     })
 
     const reviews = useSelector((state) => {
-        console.log('IN THE USESELECTPR', state.reviews.reviewsBySpotId)
+        // console.log('IN THE USESELECTPR', state.reviews.reviewsBySpotId)
         return state.reviews.reviewsBySpotId[id]
     })
 
@@ -144,42 +145,44 @@ const GetDetailsSpot = () => {
     };
 
     return (
-        <div>
-            <h1>{spot.name}</h1>
-            <p>Location: {spot.city}, {spot.state}, {spot.country}</p>
-            <div>
+        <div className={styles.container}>
+            <div className={styles.content}>
+            <h1 className={styles.title}>{spot.name}</h1>
+            <p className={styles.location}>Location: {spot.city}, {spot.state}, {spot.country}</p>
+            <div className={styles.imageContainer}>
                 {/* <img src={spot.SpotImages} alt={spot.name} /> */}
                 {spot.SpotImages && spot.SpotImages.length > 0 ? (
-                <div>
-                    {spot.SpotImages.map((obj, index) => (
-                        // <>
-                        // {console.log(obj)}
-                         <img key={index} src={obj.url} alt={`Spot image ${"index + 1"}`} />
-                        // </>
-
-                    ))}
-                </div>
+                <>
+                    <div className={styles.largeImage}>
+                        <img src={spot.SpotImages[0].url} alt={`Spot image 1`} />
+                    </div>
+                    <div className={styles.smallImages}>
+                        {spot.SpotImages.slice(1).map((obj, index) => (
+                            <img key={index} src={obj.url} alt={`Spot image ${"index + 2"}`} />
+                        ))}
+                    </div>
+                </>
             ): (
                 <div>No images available for this spot</div>
             )}
             </div>
-            <p>Hosted by {spot.id}</p>
-            <div>
-                <p>{spot.price} per night</p>
-                <p>
-                    <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
-                </p>
-                <button onClick={handleReserveClick}>Reserve</button>
-            </div>
+            <p className={styles.host}>Hosted by {spot.id}</p>
+
             <div>
                 {userId && (userId !== spot.owner_id) &&(
                      <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
                 )}
             </div>
-            <div>
-                {renderReviews()}
-            </div>
+            <div className={styles.reviews}>{renderReviews()}</div>
         </div>
+        <div className={styles.priceDetails}>
+            <h4>{spot.price} per night</h4>
+            <p className={styles.rating}>
+                <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
+            </p>
+            <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
+        </div>
+    </div>
     )
 }
 

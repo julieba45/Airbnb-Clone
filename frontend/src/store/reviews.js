@@ -3,8 +3,8 @@ import { fetchSpot } from "./spots";
 
 //action types
 const GET_REVIEWS = 'reviews/GET_ALL_REVIEWS';
-const CREATE_REVIEW = 'reviews/CREATE_REVIEW';
-const DELETE_REVIEW = 'reviews/DELETE';
+// const CREATE_REVIEW = 'reviews/CREATE_REVIEW';
+// const DELETE_REVIEW = 'reviews/DELETE';
 
 
 //action creators
@@ -13,15 +13,15 @@ const getAllReviews = (reviews) => ({
     reviews
 });
 
-const createReview = (review) => ({
-    type: CREATE_REVIEW,
-    review
-});
+// const createReview = (review) => ({
+//     type: CREATE_REVIEW,
+//     review
+// });
 
-const deleteReview = (reviewId) => ({
-    type: DELETE_REVIEW,
-    reviewId
-})
+// const deleteReview = (reviewId) => ({
+//     type: DELETE_REVIEW,
+//     reviewId
+// })
 
 //thunk action creators
 export const fetchReviewsBySpotId = (spotId) => async(dispatch) => {

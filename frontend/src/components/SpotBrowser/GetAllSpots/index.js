@@ -25,11 +25,11 @@ const GetAllSpots = () => {
                         <NavLink to={`/spots/${spot.id}`} key={spot.id} className="spot-card">
                         <li key={spot.id}>
                             <div className='description'>
-                                <div>
+                                <div className='image-container'>
                                     {spot.previewImage && spot.previewImage !== 'no spot preview image found' ? (
                                         <img src={spot.previewImage} alt={spot.name} />
                                     ) : (
-                                        // You can render alternative content or a placeholder image here
+                                        // Render alternative content or a placeholder image here
                                         <div>No preview image available</div>
                                     )}
                                 </div>
