@@ -1,8 +1,8 @@
 import React from 'react';
 
-const DeleteReviewModal = ({closeModal, deleteRevew}) => {
+const DeleteReviewModal = ({closeModal, deleteReview}) => {
     const handleDelete = () => {
-        deleteRevew();
+        deleteReview();
         closeModal();
     }
     return (

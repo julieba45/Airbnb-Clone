@@ -45,12 +45,12 @@ const GetDetailsSpot = () => {
     //     }
     // }, [spot]);
 
-    const updateReviews = () => {
-        dispatch(fetchReviewsBySpotId(id))
+    const updateReviews = async () => {
+        await dispatch(fetchReviewsBySpotId(id))
     }
 
-    const deleteReview = (reviewId) => {
-        dispatch(removeReview(reviewId))
+    const deleteReview = (spotId, reviewId) => {
+        dispatch(removeReview(spotId, reviewId))
     }
 
     useEffect(() => {
@@ -129,7 +129,7 @@ const GetDetailsSpot = () => {
                                     setModalContent(
                                         <DeleteReviewModal
                                             closeModal={closeModal}
-                                            deleteRevew={() => deleteReview(review.id)}
+                                            deleteReview={() => deleteReview(review.spotId, review.id)}
                                         />
                                     )
                                 }}
