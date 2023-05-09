@@ -42,6 +42,7 @@ export const createReviewBySpotId = (spotId, review) => async(dispatch) => {
     if(response.ok){
         console.log('--------- RESPONSE IS OK')
         const newreview = await response.json();
+        // newreview.spotId = spotId    //////////////////////////////////
         dispatch(createReview(newreview))
         return newreview
     }else {
@@ -86,43 +87,25 @@ const reviewsReducer = (state = initialState, action) => {
 
             }
         case CREATE_REVIEW:
-            // console.log('newstate', { ...state)
-            // console.log('STATE', state)
-            // console.log('newSTATE', { ...state,
-            //     reviewsBySpotId: {
-            //         ...state.reviewsBySpotId,
-            //         [newSpotId]: updatedReviews,
-            //     },})
-            // console.log('-----ACTION')
-            //     const newSpotId = action.review.spotId;
-            //     const updatedReviews = state.reviewsBySpotId[newSpotId]
-            //         ? [...state.reviewsBySpotId[newSpotId], action.review]
-            //         : [action.review];
-            //     return {
-            //         ...state,
-            //         reviewsBySpotId: {
-            //             ...state.reviewsBySpotId,
-            //             [newSpotId]: updatedReviews,
-            //         },
-            //     };
-                // reviewsBySpotId: {
-                //     ...state.reviewsBySpotId,
-                // }})
-            console.log('HEY IM IN THE CREATEREVIEW CASE')
-            console.log('ACTION', action)
-            console.log('state', state)
-            console.log('NEWstate', {
-                ...state,
-                reviewsBySpotId: {
-                    ...state.reviewsBySpotId,
-                }
-            })
-            return{
-                ...state,
-                reviewsBySpotId: {
-                    ...state.reviewsBySpotId,
-                }
-            }
+            // const newReview = action;
+            // const spotId = newReview.spotId;
+
+            // console.log("----ACTION", action)
+            // console.log("------Old State", state)
+
+            // const newerState = { ...state };
+            // if (!newerState.reviewsBySpotId[action.review.spotId]){
+            //     newerState.reviewsBySpotId[action.review.spotId] = [];
+            // }
+            // newerState.reviewsBySpotId[action.review.spotId].push(action.review);
+            // console.log("------NEW STATE", newerState)
+            // return newerState
+            let newstate = {...state}
+            newstate.reviewsBySpotId[action.review.spotId] = action.review
+            return newstate
+                // reviewsBySpotId: {[action.review.spotId] : action.review}
+
+
 
         case DELETE_REVIEW:
             console.log('STATE', state)
