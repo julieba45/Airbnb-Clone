@@ -12,20 +12,28 @@ const GetDetailsSpot = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const {setModalContent, closeModal} = useModal();
-    // console.log("id from useParams:", id);
+    console.log("id from useParams:", id);
 
     const spot = useSelector((state) => {
        return state.spots.currentSpot
     })
 
     const reviews = useSelector((state) => {
-        // console.log('IN THE USESELECTPR', state.reviews.reviewsBySpotId)
+        // console.log('IN THE USESELECTPR', state.reviews)
+        console.log("-------REVIEWS VARIABLE", state.reviews.reviewsBySpotId[id])
         return state.reviews.reviewsBySpotId[id]
     })
 
-    if(reviews){
-        console.log('REVIEWS', reviews)
-    }
+    const reviewers = useSelector((state) =>{
+        let usr_ls = []
+        let allreviews = state.reviews.reviewsBySpotId[id]
+        if(allreviews){
+            allreviews.forEach(review => {
+                usr_ls.push(review['userId'])
+           })
+        }
+        return usr_ls
+    })
 
 
     const userId = useSelector((state) => {
@@ -60,6 +68,7 @@ const GetDetailsSpot = () => {
 
 
     useEffect(() => {
+        console.log('Fetching reviews for spot ID:', id)
         dispatch(fetchReviewsBySpotId(id))
     }, [dispatch, id])
 
@@ -166,23 +175,28 @@ const GetDetailsSpot = () => {
                 <div>No images available for this spot</div>
             )}
             </div>
-            <p className={styles.host}>Hosted by {spot.id}</p>
 
+            <p className={styles.host}>Hosted by {spot.Owner.firstName}, {spot.Owner.lastName}</p>
 
-            <div className={styles.priceDetails}>
-            <h4>{spot.price} per night</h4>
-            <p className={styles.rating}>
-                <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
-            </p>
-            <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
+            <div className={styles.pandprice}>
+                <p className={styles.paragraph}>{spot.description}</p>
+                <div className={styles.priceDetails}>
+                <h4>{spot.price} per night</h4>
+                <p className={styles.rating}>
+                    <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
+                </p>
+                <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
+                </div>
             </div>
 
+
+
             <div>
-                {userId && (userId !== spot.owner_id) &&(
+                {userId && (userId !== spot.owner_id) && (!reviewers.includes(userId)) && (
                      <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
                 )}
             </div>
-            <div className={styles.reviews}>{renderReviews()}</div>
+            <div className={styles.reviews}>{}{renderReviews()}</div>
         </div>
 
     </div>

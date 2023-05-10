@@ -75,7 +75,7 @@ export const fetchAllSpots = () => async (dispatch) => {
     // console.log('---SPOTS ID RESPONSE----',response)
     if(response.ok){
       const spot = await response.json();
-      // console.log('SPOT DETAILS:',spot)
+      console.log('SPOT DETAILS:',spot)
       dispatch(setCurrentSpot(spot))
     }
   };
@@ -184,7 +184,7 @@ export const fetchAllSpots = () => async (dispatch) => {
         return handleGetAllSpots(state, action)
         // return { ...state, spots: action.spots };
       case GET_CURRENT_SPOT:
-        // console.log('ACTION',action)
+        console.log("------------CURRENT SPOTS", action.spots.Spots)
         const currentSpots = {};
         action.spots.Spots.forEach(spot => {
           currentSpots[spot.id] = spot
@@ -231,8 +231,12 @@ export const fetchAllSpots = () => async (dispatch) => {
         return { ...state, spots: { ...state.spots, [action.spot.id]: action.spot } };
       case DELETE_SPOT:
         console.log('DELETING A SPOT ACTION CASE')
+        console.log('-------ACTION', action)
+        console.log('-----------OLD STATE', state)
         const newState = { ...state };
-        delete newState.spots[action.spotId];
+        console.log("-------- CHECK NEW STATE", newState)
+        console.log('---------TO BE DELETED22222', newState.spotsCurrentUser[action.spotId])
+        delete newState.spotsCurrentUser[action.spotId];
         return newState;
 
       default:
