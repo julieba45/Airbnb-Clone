@@ -175,16 +175,21 @@ const GetDetailsSpot = () => {
                 <div>No images available for this spot</div>
             )}
             </div>
-            <p className={styles.host}>Hosted by {spot.id}</p>
 
+            <p className={styles.host}>Hosted by {spot.Owner.firstName}, {spot.Owner.lastName}</p>
 
-            <div className={styles.priceDetails}>
-            <h4>{spot.price} per night</h4>
-            <p className={styles.rating}>
-                <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
-            </p>
-            <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
+            <div className={styles.pandprice}>
+                <p className={styles.paragraph}>{spot.description}</p>
+                <div className={styles.priceDetails}>
+                <h4>{spot.price} per night</h4>
+                <p className={styles.rating}>
+                    <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
+                </p>
+                <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
+                </div>
             </div>
+
+
 
             <div>
                 {userId && (userId !== spot.owner_id) && (!reviewers.includes(userId)) && (

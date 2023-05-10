@@ -75,7 +75,7 @@ export const fetchAllSpots = () => async (dispatch) => {
     // console.log('---SPOTS ID RESPONSE----',response)
     if(response.ok){
       const spot = await response.json();
-      // console.log('SPOT DETAILS:',spot)
+      console.log('SPOT DETAILS:',spot)
       dispatch(setCurrentSpot(spot))
     }
   };
