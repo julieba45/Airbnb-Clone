@@ -20,12 +20,20 @@ const GetDetailsSpot = () => {
 
     const reviews = useSelector((state) => {
         // console.log('IN THE USESELECTPR', state.reviews)
+        console.log("-------REVIEWS VARIABLE", state.reviews.reviewsBySpotId[id])
         return state.reviews.reviewsBySpotId[id]
     })
 
-    // if(reviews){
-    //     console.log('REVIEWS', reviews)
-    // }
+    const reviewers = useSelector((state) =>{
+        let usr_ls = []
+        let allreviews = state.reviews.reviewsBySpotId[id]
+        if(allreviews){
+            allreviews.forEach(review => {
+                usr_ls.push(review['userId'])
+           })
+        }
+        return usr_ls
+    })
 
 
     const userId = useSelector((state) => {
@@ -179,7 +187,7 @@ const GetDetailsSpot = () => {
             </div>
 
             <div>
-                {userId && (userId !== spot.owner_id) &&(
+                {userId && (userId !== spot.owner_id) && (!reviewers.includes(userId)) && (
                      <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
                 )}
             </div>
