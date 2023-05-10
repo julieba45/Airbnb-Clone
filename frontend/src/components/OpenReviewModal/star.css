@@ -1,0 +1,10 @@
+.star{
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    user-select: none;
+}
+
+.star.filled {
+    color: #f5a623;
+}

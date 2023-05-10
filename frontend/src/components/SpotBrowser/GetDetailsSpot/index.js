@@ -118,18 +118,23 @@ const GetDetailsSpot = () => {
 
         return (
             <div>
-                <h2>Reviews</h2>
+                {/* <h2>Reviews</h2> */}
+                <h2 className={styles.rating}>
+                    <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
+                </h2>
                 {reviews
                     .slice()
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                     .map((review) => (
                         <div key={review.id}>
                         <p>
-                            {review.User.firstName} -{" "}
-                            {new Date(review.createdAt).toLocaleString("default", {
-                            month: "long",
-                            year: "numeric",
-                            })}
+                            {review.User.firstName}
+                            <div className={styles.date}>
+                                {new Date(review.createdAt).toLocaleString("default", {
+                                month: "long",
+                                year: "numeric",
+                                })}
+                            </div>
                         </p>
                         <p>{review.review}</p>
 

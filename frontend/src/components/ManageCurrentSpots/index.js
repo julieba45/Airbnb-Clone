@@ -43,11 +43,13 @@ const GetAllCurrentSpots = () => {
         <div>
           <h1>Manage Spots</h1>
           {spotsArray.length > 0 ? (
-            <div>
+            <div className='manage-spots-grid'>
               {spotsArray.map((spot) => (
                 <div key={spot.id} className="spot-tile">
                   <NavLink to={`/spots/${spot.id}`} className="spot-tile-link">
-                    <img src={spot.previewImage} alt={spot.name} />
+                    <div className='manage-image-container'>
+                      <img src={spot.previewImage} alt={spot.name} />
+                    </div>
                     <h3>{spot.name}</h3>
                     <div>{`${spot.city}, ${spot.state}`}</div>
                     <div>Rating: {spot.avgRating}</div>

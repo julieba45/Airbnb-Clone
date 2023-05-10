@@ -23,7 +23,7 @@ const GetAllSpots = () => {
                 <div  className='spot-grid'>
                     {spotArray.map((spot) => (
                         <NavLink to={`/spots/${spot.id}`} key={spot.id} className="spot-card">
-                        <li key={spot.id}>
+                        <div key={spot.id}>
                             <div className='description'>
                                 <div className='image-container'>
                                     {spot.previewImage && spot.previewImage !== 'no spot preview image found' ? (
@@ -37,7 +37,7 @@ const GetAllSpots = () => {
                                 <p>${spot.price}</p>
                                 <p>{spot.avgRating} stars</p>
                             </div>
-                        </li>
+                        </div>
                         </NavLink>
                     ))}
                 </div>
