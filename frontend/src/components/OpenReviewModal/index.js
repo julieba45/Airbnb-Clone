@@ -2,19 +2,22 @@
 import React, {useState} from "react";
 import { useDispatch } from "react-redux";
 import { createReviewBySpotId} from "../../store/reviews";
+import reviewmodalstyles from "./OpenReviewModal.module.css"
+import Star from "./star";
 
 const ReviewConfirmationalModal = ({spotId, closeModal, updateReviews}) => {
     const dispatch = useDispatch()
     const [review, setReview] = useState('');
     const [stars, setStars] = useState(0);
+    const [hoveredStar, setHoveredStar] = useState(0);
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleCommentChange = (e) => {
         setReview(e.target.value);
     };
 
-    const handleRatingChange = (e) => {
-        setStars(parseInt(e.target.value, 10));
+    const handleRatingChange = (rating) => {
+        setStars(rating);
     };
 
     const resetForm = () => {
@@ -49,18 +52,26 @@ const ReviewConfirmationalModal = ({spotId, closeModal, updateReviews}) => {
 
     }
     return (
-        <div>
+        <div className={reviewmodalstyles.container}>
             <h1>How was your stay?</h1>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
-            <textarea
+            <textarea className={reviewmodalstyles.textarea}
                 placeholder="Leave your review here ..."
                 value={review}
                 onChange={handleCommentChange}
             />
-            <label>
+            <div>
                 Stars
-                <input type="number" min="1" max="5" value={stars} onChange={handleRatingChange}></input>
-            </label>
+                {[1, 2, 3, 4, 5].map((starIndex) => (
+                    <Star
+                    key={starIndex}
+                    filled={hoveredStar >= starIndex || stars >= starIndex}
+                    onMouseEnter={() => setHoveredStar(starIndex)}
+                    onMouseLeave={() => setHoveredStar(0)}
+                    onClick={() => handleRatingChange(starIndex)}
+                    />
+                ))}
+            </div>
             <button onClick={handleSubmit}
                 disabled={review.length < 10 || stars === 0}
             >
