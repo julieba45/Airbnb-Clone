@@ -12,20 +12,20 @@ const GetDetailsSpot = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const {setModalContent, closeModal} = useModal();
-    // console.log("id from useParams:", id);
+    console.log("id from useParams:", id);
 
     const spot = useSelector((state) => {
        return state.spots.currentSpot
     })
 
     const reviews = useSelector((state) => {
-        // console.log('IN THE USESELECTPR', state.reviews.reviewsBySpotId)
+        // console.log('IN THE USESELECTPR', state.reviews)
         return state.reviews.reviewsBySpotId[id]
     })
 
-    if(reviews){
-        console.log('REVIEWS', reviews)
-    }
+    // if(reviews){
+    //     console.log('REVIEWS', reviews)
+    // }
 
 
     const userId = useSelector((state) => {
@@ -60,6 +60,7 @@ const GetDetailsSpot = () => {
 
 
     useEffect(() => {
+        console.log('Fetching reviews for spot ID:', id)
         dispatch(fetchReviewsBySpotId(id))
     }, [dispatch, id])
 
@@ -182,7 +183,7 @@ const GetDetailsSpot = () => {
                      <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
                 )}
             </div>
-            <div className={styles.reviews}>{renderReviews()}</div>
+            <div className={styles.reviews}>{}{renderReviews()}</div>
         </div>
 
     </div>
