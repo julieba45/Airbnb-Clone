@@ -5,7 +5,7 @@
       "content priceDetails"; */
     display: flex;
     /* grid-template-columns: 3fr 1fr; */
-    flex-direction: column;
+    flex-direction: row;
     /* grid-gap: 20px; */
     max-width: 1200px;
     margin: 0 auto;
