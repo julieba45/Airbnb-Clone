@@ -40,6 +40,7 @@ const GetAllCurrentSpots = () => {
       };
 
       return (
+
         <div>
           <h1>Manage Spots</h1>
           {spotsArray.length > 0 ? (
@@ -50,10 +51,22 @@ const GetAllCurrentSpots = () => {
                     <div className='manage-image-container'>
                       <img src={spot.previewImage} alt={spot.name} />
                     </div>
-                    <h3>{spot.name}</h3>
-                    <div>{`${spot.city}, ${spot.state}`}</div>
-                    <div>Rating: {spot.avgRating}</div>
-                    <div>Price: ${spot.price}</div>
+                    {/* <h3>{spot.name}</h3> */}
+
+                    <div className='locationplusstar'>
+                      <div>{`${spot.city}, ${spot.state}`}</div>
+                      {/* <div>Rating: {spot.avgRating}</div>
+                      <div>Price: ${spot.price}</div> */}
+                      <p>
+                        <i className="fas fa-star icon"></i>
+                        {spot.avgRating === 0 || spot.avgRating === null || spot.avgRating === "no reviews"
+                          ? "New" : `${Number(spot.avgRating).toFixed(1)}`
+                        }
+                      </p>
+                    </div>
+
+                    <p>${spot.price} night</p>
+
                   </NavLink>
                   <button onClick={() => handleUpdateClick(spot)}>Update</button>
                   <button onClick={() => openDeleteConfirmation(spot.id)}>Delete</button>
@@ -65,6 +78,9 @@ const GetAllCurrentSpots = () => {
           )}
         </div>
       );
+
+
+
     };
 
     export default GetAllCurrentSpots;
