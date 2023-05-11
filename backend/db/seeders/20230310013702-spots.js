@@ -72,38 +72,38 @@ module.exports = {
       {
         owner_id: 3,
         address: "128 Disney Lane",
-        city: "Marton",
-        state: "Manawatu-Wanganui",
-        country: "New Zealand",
+        city: "Raellingen",
+        state: "Akershus",
+        country: "Norway",
         lat: 37.7645358,
         lng: -122.4730327,
-        name: "Yellow Submarine",
-        description: "1960's: All aboard for the magical mystery tour with the Beatles and their Yellow Submarine, powered by love; because that's what makes the world go round Cold War superpower scenario: 'Hunt for Red October'puts you in charge of nuclear mutually assured destruction,will soviet or US flinch first?",
+        name: "The WonderINN Mirrored Glass Cabin",
+        description: "Immerse yourself in the wilderness, still within reach of civilization! WonderINN is literally a hidden gem; the unique design of the mirrored glass blends into the landscape so you can retreat to comfort and luxury as you watch the world pass by.",
         price: 250
       },
       {
         owner_id: 3,
         address: "129 Disney Lane",
-        city: "Marton",
-        state: "Manawatu-Wanganui",
-        country: "New Zealand",
+        city: "Cedar City",
+        state: "Utah",
+        country: "United States of America",
         lat: 37.7645358,
         lng: -122.4730327,
-        name: "Yellow Submarine",
+        name: "Hobbit Cottage",
         description: "1960's: All aboard for the magical mystery tour with the Beatles and their Yellow Submarine, powered by love; because that's what makes the world go round Cold War superpower scenario: 'Hunt for Red October'puts you in charge of nuclear mutually assured destruction,will soviet or US flinch first?",
-        price: 250
+        price: 110
       },
       {
         owner_id: 3,
         address: "130 Disney Lane",
-        city: "Marton",
-        state: "Manawatu-Wanganui",
-        country: "New Zealand",
+        city: "Tampaksiring",
+        state: "Bali",
+        country: "Indonesia",
         lat: 37.7645358,
         lng: -122.4730327,
-        name: "Yellow Submarine",
-        description: "1960's: All aboard for the magical mystery tour with the Beatles and their Yellow Submarine, powered by love; because that's what makes the world go round Cold War superpower scenario: 'Hunt for Red October'puts you in charge of nuclear mutually assured destruction,will soviet or US flinch first?",
-        price: 250
+        name: "Dome - Bamboo Villa in Eco Six Bali",
+        description: "Located just a 20-minute scooter ride from the vibrant centre of Ubud, the Dome is a newly built one bedroom bamboo cabin situated within the Eco Six Resort.Enjoy the spacious two floored villa and its Santorini style infinity pool!",
+        price: 460
       },
 
     ], {})
