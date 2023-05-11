@@ -17,8 +17,8 @@ const GetAllSpots = () => {
     }, [dispatch]);
 
     return (
-        <div>
-            <h1>All Spots</h1>
+        <div className='outermost-container-tiles'>
+            {/* <h1>All Spots</h1> */}
             {spotArray && spotArray.length > 0 ? (
                 <div  className='spot-grid'>
                     {spotArray.map((spot) => (
@@ -33,9 +33,19 @@ const GetAllSpots = () => {
                                         <div>No preview image available</div>
                                     )}
                                 </div>
-                                <h3>{spot.city}</h3>
-                                <p>${spot.price}</p>
-                                <p>{spot.avgRating} stars</p>
+                                <h3 className='cityandstate'>{spot.city}, {spot.state}</h3>
+
+                                {/* <p>
+                                        Raw value: {spot.avgRating}
+                                </p> */}
+                                <p>
+                                    <i className="fas fa-star"></i>
+                                    {spot.avgRating === 0 || spot.avgRating === null || spot.avgRating === "no reviews"
+                                        ? "New": `${Number(spot.avgRating).toFixed(1)} stars`
+                                    }
+                                </p>
+
+                                <p>${spot.price} night</p>
                             </div>
                         </div>
                         </NavLink>
