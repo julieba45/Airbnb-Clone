@@ -23,6 +23,7 @@ const GetAllSpots = () => {
                 <div  className='spot-grid'>
                     {spotArray.map((spot) => (
                         <NavLink to={`/spots/${spot.id}`} key={spot.id} className="spot-card">
+                                <span className='tooltip'>{spot.name}</span>
                         <div key={spot.id}>
                             <div className='description'>
                                 <div className='image-container'>
@@ -33,17 +34,19 @@ const GetAllSpots = () => {
                                         <div>No preview image available</div>
                                     )}
                                 </div>
-                                <h3 className='cityandstate'>{spot.city}, {spot.state}</h3>
+                                <div className='locationplusstar'>
+                                    <h3 className='cityandstate'>{spot.city}, {spot.state}</h3>
 
-                                {/* <p>
-                                        Raw value: {spot.avgRating}
-                                </p> */}
-                                <p>
-                                    <i className="fas fa-star"></i>
-                                    {spot.avgRating === 0 || spot.avgRating === null || spot.avgRating === "no reviews"
-                                        ? "New": `${Number(spot.avgRating).toFixed(1)} stars`
-                                    }
-                                </p>
+                                    {/* <p>
+                                            Raw value: {spot.avgRating}
+                                    </p> */}
+                                    <p>
+                                        <i className="fas fa-star icon"></i>
+                                        {spot.avgRating === 0 || spot.avgRating === null || spot.avgRating === "no reviews"
+                                            ? "New": `${Number(spot.avgRating).toFixed(1)}`
+                                        }
+                                    </p>
+                                </div>
 
                                 <p>${spot.price} night</p>
                             </div>

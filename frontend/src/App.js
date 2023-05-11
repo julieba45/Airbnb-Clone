@@ -9,6 +9,7 @@ import GetDetailsSpot from "./components/SpotBrowser/GetDetailsSpot";
 import CreateSpot from "./components/CreateSpot";
 import GetAllCurrentSpots from "./components/ManageCurrentSpots";
 import UpdateSpot from "./components/EditSpots";
+import "./index.css"
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <>
+    <div className="global-container">
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
@@ -42,6 +44,7 @@ function App() {
 
         </Switch>
       )}
+      </div>
     </>
   );
 }

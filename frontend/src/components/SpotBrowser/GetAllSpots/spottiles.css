@@ -1,13 +1,16 @@
 .outermost-container-tiles{
+    margin: 0;
+    padding: 0;
 }
 
 
 .spot-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    grid-gap: 0px;
-    padding: 4px;
-    max-width: 1024px;
+    grid-gap: 16px;
+    padding: 16px;
+    /* max-width: 1024px; */
+    width: 100%;
     margin: 0 auto;
     /* text-decoration: none;
     color: inherit; */
@@ -22,6 +25,8 @@
     flex-direction: column;
     text-decoration: none;
     color: inherit;
+    position: relative;
+    /* overflow: hidden; */
 }
 
 .spot-card img {
@@ -43,3 +48,44 @@
 .cityandstate{
     font-size: medium;
 }
+
+.locationplusstar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fas.fa-star{
+    font-size: 12px;
+}
+
+/* .locationplusstar p{
+    font-size:
+} */
+
+/* .locationplusstar h3,
+.locationplusstar p {
+  margin: 0;
+} */
+
+.tooltip {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    top: -10px;
+    max-width: 80%;
+    left: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    transform: translateX(-50%);
+  }
+
+  .spot-card:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
