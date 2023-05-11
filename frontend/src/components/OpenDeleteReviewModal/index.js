@@ -1,4 +1,5 @@
 import React from 'react';
+import deleteReviewcss from "./index.module.css"
 
 const DeleteReviewModal = ({closeModal, deleteReview}) => {
     const handleDelete = () => {
@@ -6,13 +7,13 @@ const DeleteReviewModal = ({closeModal, deleteReview}) => {
         closeModal();
     }
     return (
-        <div>
+        <div className={deleteReviewcss.delRevcontainer}>
             <h2>Confirm Delete</h2>
             <p>Are you sure you want to delete this review?</p>
-            <button onClick={handleDelete} style={{backgroundColor: "red"}}>
+            <button className={deleteReviewcss.yesDelBtn}onClick={handleDelete}>
                 Yes (Delete Review)
             </button>
-            <button onClick={closeModal} style={{backgroundColor: "darkgrey"}}>
+            <button className={deleteReviewcss.noDelBtn} onClick={closeModal} >
                 No (Keep Review)
             </button>
         </div>

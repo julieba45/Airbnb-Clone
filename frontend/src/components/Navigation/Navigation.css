@@ -2,7 +2,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1024px;
     width: 100%;
+    /* padding-right: 50px;
+    padding-left: 50px; */
+    padding: 0;
+    /* padding: 50px; */
 }
 
 .navbar-logo {
@@ -17,4 +22,5 @@
 .navbar-menu {
     display: flex;
     gap: 1rem;
+    justify-content: space-between;
   }

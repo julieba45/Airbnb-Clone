@@ -109,9 +109,18 @@ const GetDetailsSpot = () => {
 
         if(!reviews || reviews.length === 0){
             if((spot.owner_id !== userId) && (userId)){
-                return <div>Be the first to post a review!</div>
+                return <div>
+                            <h2 className={styles.rating}>
+                            <   i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0}
+                            </h2>
+                    Be the first to post a review!
+                    </div>
             }else{
-                return <div>No reviews have been posted yet.</div>
+                return <div>
+                        <h2 className={styles.rating}>
+                            < i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0}
+                        </h2>
+                    No reviews have been posted yet.</div>
             }
         }
 
@@ -194,14 +203,14 @@ const GetDetailsSpot = () => {
                 </div>
             </div>
 
-
+            <div className={styles.reviews}>{}{renderReviews()}</div>
 
             <div>
                 {userId && (userId !== spot.owner_id) && (!reviewers.includes(userId)) && (
                      <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
                 )}
             </div>
-            <div className={styles.reviews}>{}{renderReviews()}</div>
+
         </div>
 
     </div>

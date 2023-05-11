@@ -69,7 +69,7 @@ const ReviewConfirmationalModal = ({spotId, closeModal, updateReviews}) => {
                     onMouseEnter={() => setHoveredStar(starIndex)}
                     onMouseLeave={() => setHoveredStar(0)}
                     onClick={() => handleRatingChange(starIndex)}
-                    />
+                  />
                 ))}
             </div>
             <button onClick={handleSubmit}

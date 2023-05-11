@@ -1,0 +1,31 @@
+.delRevcontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    text-align: center;
+}
+
+.yesDelBtn,
+.noDelBtn{
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+}
+
+.yesDelBtn {
+    background-image:linear-gradient(to bottom, #ff5a5f, #ff385c);
+    color: white;
+}
+
+.noDelBtn {
+    background-color: grey;
+    color: white;
+}

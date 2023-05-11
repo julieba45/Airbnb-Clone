@@ -1,7 +1,7 @@
 import React from "react";
 import './star.css';
 
-const Star = ({filled, onMouseEnter, onMouseLeave, onClick}) => {
+const Star = ({ filled, onMouseEnter, onMouseLeave, onClick}) => {
     const starClass = filled ? 'star filled' : 'star';
     return (
         <span
