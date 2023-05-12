@@ -42,7 +42,7 @@ const GetAllCurrentSpots = () => {
       return (
 
         <div>
-          <h1>Manage Spots</h1>
+          <h1 className='manage-spots-heading'>Manage Spots</h1>
           {spotsArray.length > 0 ? (
             <div className='manage-spots-grid'>
               {spotsArray.map((spot) => (

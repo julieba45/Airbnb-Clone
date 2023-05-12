@@ -53,6 +53,8 @@
   overflow: hidden;
   font-size: 14px;
   line-height: 1.5;
+  margin-top: 250px;
+  margin-left: 100px;
 }
 
 .profile-dropdown.hidden {
@@ -111,4 +113,8 @@
 
 .profile-dropdown nav:hover {
   background-color: #f7f7f7;
+}
+
+.manage-spots-link{
+  text-decoration: none;
 }

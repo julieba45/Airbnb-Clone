@@ -38,11 +38,11 @@ const CreateSpot = () => {
             errors.description = "Description needs 30 or more characters";
             if (!price) errors.price = "Price per night is required";
             if (!previewImageUrl) errors.previewImageUrl= "Preview Image URL is required";
-            if (!imageUrl){
-              errors.imageUrl = "Image URL is required"
-            }else if(!/\.(jpg|jpeg|png)/i.test(imageUrl)){
-              errors.imageUrl = "Image URL must end in .jpg, .jpeg or .png"
-            }
+            // if (!imageUrl){
+            //   errors.imageUrl = "Image URL is required"
+            // }else if(!/\.(jpg|jpeg|png)/i.test(imageUrl)){
+            //   errors.imageUrl = "Image URL must end in .jpg, .jpeg or .png"
+            // }
            return errors
     }
 
@@ -257,9 +257,6 @@ const CreateSpot = () => {
               onChange={(e) => setImageUrl(e.target.value)}
             />
           </label >
-          {errors.imageUrl && (
-            <div className={styles.error}>{errors.imageUrl}</div>
-            )}
           <label className={styles.label}>
             <input
               className={styles.input}
