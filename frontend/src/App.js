@@ -25,7 +25,9 @@ function App() {
   return (
     <>
     <div className="global-container">
+      <div className="top-section">
       <Navigation isLoaded={isLoaded} />
+        </div>
       {isLoaded && (
         <Switch>
           <Route exact path={["/", "/spots"]}>
@@ -44,6 +46,7 @@ function App() {
 
         </Switch>
       )}
+
       </div>
     </>
   );

@@ -2,5 +2,18 @@
 .global-container{
     max-width: 1200px;
     margin: 0 auto;
-    /* padding: 0 16px; */
+    padding: 100px;
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-rows: 0.08fr 1.7fr;
+    gap: 5px 5px;
+}
+
+.top-section{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #ffffff;
 }
