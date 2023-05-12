@@ -37,7 +37,7 @@ function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
 
   return (
-    <nav className="navbar">
+    <nav>
       <div className="navbar-container">
         <div className="navbar-logo">
           <NavLink exact to="/">

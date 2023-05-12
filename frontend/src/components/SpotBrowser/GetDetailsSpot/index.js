@@ -94,14 +94,11 @@ const GetDetailsSpot = () => {
     const renderReviewsCount = () => {
         console.log('INSIDE RENDERREVIEWS FUNCTION', spot)
         if(spot.numReviews === 0){
-            console.log('1')
             return null
         } else if(spot.numReviews === 1){
-            console.log('2')
             return <span>1 Review</span>
         }else {
-            console.log('3')
-            return <span>{spot.numReviews}</span>
+            return <span>{spot.numReviews} Reviews</span>
         }
     }
 
