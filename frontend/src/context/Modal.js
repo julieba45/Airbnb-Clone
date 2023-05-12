@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "./Modal.css";
 
@@ -27,6 +27,16 @@ export function ModalProvider({ children }) {
     setOnModalClose, // function to set the callback function called when modal is closing
     closeModal, // function to close the modal
   };
+
+  useEffect(() => {
+    // Get the .top-section element
+    const topSectionElement = document.querySelector(".top-section");
+    if (modalContent) {
+      topSectionElement.classList.add("modal-open");
+    } else {
+      topSectionElement.classList.remove("modal-open");
+    }
+  }, [modalContent]);
 
   return (
     <>
