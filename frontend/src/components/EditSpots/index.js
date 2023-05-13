@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { editSpot } from "../../store/spots";
 import { useParams } from 'react-router-dom';
-
+import editspotstyles from "./editSpots.module.css"
 const UpdateSpot = ({spot}) => {
     const {id} = useParams();
     const dispatch = useDispatch();
@@ -79,16 +79,16 @@ const UpdateSpot = ({spot}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-          <h1>Create a New Spot</h1>
+        <form onSubmit={handleSubmit} className={editspotstyles.container}>
+          <h1 className={editspotstyles.heading}>Create a New Spot</h1>
            {/* ... */}
-          <h2>Where's your place located?</h2>
-          <p>
+          <h2 className={editspotstyles.subheading}>Where's your place located?</h2>
+          <p className={editspotstyles.paragraph}>
             Guests will only get your exact address once they booked a reservation.
           </p>
-          <label>
+          <label className={editspotstyles.label}>
             Country
-            <input
+            <input  className={editspotstyles.input}
               type="text"
               value={country}
               placeholder="Country"
@@ -98,9 +98,9 @@ const UpdateSpot = ({spot}) => {
           {errors.country && (
             <div style={{ color: "red" }}>{errors.country}</div>
             )}
-          <label>
+          <label className={editspotstyles.label}>
             Street Address
-            <input
+            <input className={editspotstyles.input}
               type="text"
               value={address}
               placeholder="Street Address"
@@ -110,9 +110,9 @@ const UpdateSpot = ({spot}) => {
           {errors.address && (
             <div style={{ color: "red" }}>{errors.address}</div>
             )}
-          <label>
+          <label className={editspotstyles.label}>
             City
-            <input
+            <input className={editspotstyles.input}
               type="text"
               value={city}
               placeholder="City"
@@ -122,9 +122,9 @@ const UpdateSpot = ({spot}) => {
           {errors.city  && (
             <div style={{ color: "red" }}>{errors.city}</div>
             )}
-          <label>
+          <label className={editspotstyles.label}>
             State
-            <input
+            <input className={editspotstyles.input}
               type="text"
               value={state}
               placeholder="State"
@@ -134,9 +134,9 @@ const UpdateSpot = ({spot}) => {
           {errors.state  && (
             <div style={{ color: "red" }}>{errors.state}</div>
             )}
-          <label>
+          <label className={editspotstyles.label}>
             Latitude
-            <input
+            <input className={editspotstyles.input}
               type="text"
               value={lat}
               placeholder="Lat"
@@ -146,9 +146,9 @@ const UpdateSpot = ({spot}) => {
           {errors.lat  && (
             <div style={{ color: "red" }}>{errors.lat}</div>
             )}
-          <label>
+          <label className={editspotstyles.label}>
             Longitude
-            <input
+            <input className={editspotstyles.input}
               type="text"
               value={lng}
               placeholder="Lng"
@@ -158,13 +158,13 @@ const UpdateSpot = ({spot}) => {
           {errors.lng  && (
             <div style={{ color: "red" }}>{errors.lng}</div>
             )}
-          <h2>Describe your place to guests</h2>
-          <p>
+          <h2 className={editspotstyles.subheading}>Describe your place to guests</h2>
+          <p className={editspotstyles.paragraph}>
             Mention the best features of your space, any special amentities like
             fast wifi or parking, and what you love about the neighborhood.
           </p>
-          <label>
-            <input
+          <label className={editspotstyles.label}>
+            <input className={editspotstyles.input}
               type="text"
               value={description}
               placeholder="Description"
@@ -175,13 +175,13 @@ const UpdateSpot = ({spot}) => {
             <div style={{ color: "red" }}>{errors.description}</div>
             )}
 
-          <h2>Create a title for your Spot</h2>
-          <p>
+          <h2 className={editspotstyles.subheading}>Create a title for your Spot</h2>
+          <p className={editspotstyles.paragraph}>
             Catch guests' attention with a spot title that highlights what makes
             your place special
           </p>
-          <label>
-            <input
+          <label className={editspotstyles.label}>
+            <input className={editspotstyles.input}
               type="text"
               value={name}
               placeholder="Name"
@@ -192,13 +192,13 @@ const UpdateSpot = ({spot}) => {
             <div style={{ color: "red" }}>{errors.name}</div>
             )}
 
-          <h2>Set a base price for your spot</h2>
-          <p>
+          <h2 className={editspotstyles.subheading}>Set a base price for your spot</h2>
+          <p className={editspotstyles.paragraph}>
             Competitive pricing can help your listing stand out and rank higher in
             search results.
           </p>
-          <label>
-            <input
+          <label className={editspotstyles.label}>
+            <input className={editspotstyles.input}
               type="text"
               value={price}
               placeholder="Price"
@@ -209,8 +209,8 @@ const UpdateSpot = ({spot}) => {
             <div style={{ color: "red" }}>{errors.price}</div>
             )}
 
-          <h2>Liven up your spot with photos</h2>
-          <p>
+          {/* <h2>Liven up your spot with photos</h2> */}
+          <p className={editspotstyles.paragraph}>
            Submit a link to at least one photo to publish your spot.
           </p>
           {/* <label>

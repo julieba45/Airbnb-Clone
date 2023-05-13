@@ -15,6 +15,10 @@ const GetDetailsSpot = () => {
     console.log("id from useParams:", id);
 
     const spot = useSelector((state) => {
+        console.log('MY SPOT', state.spots.currentSpot)
+        // if(spot){
+        //     console.log('the last spot', spot.SpotImages.slice(-1).url)
+        // }
        return state.spots.currentSpot
     })
 
@@ -174,11 +178,13 @@ const GetDetailsSpot = () => {
                 {spot.SpotImages && spot.SpotImages.length > 0 ? (
                 <>
                     <div className={styles.largeImage}>
-                        <img src={spot.SpotImages[0].url} alt={`Spot image 1`} />
+
+                        <img src={spot.SpotImages.slice(-1)[0].url} alt={`Spot image 1`} />
+                        {/* { console.log('the last spot', spot.SpotImages.slice(-1)[0].url)} */}
                     </div>
                     <div className={styles.smallImages}>
-                        {spot.SpotImages.slice(1, 5).map((obj, index) => (
-                            <img key={index} src={obj.url} alt={`Spot image ${"index + 2"}`} />
+                        {spot.SpotImages.slice(0, -1).map((obj, index) => (
+                            <img key={index} src={obj.url} alt={`Spot image ${index}`} />
                         ))}
                     </div>
                 </>
@@ -192,10 +198,12 @@ const GetDetailsSpot = () => {
             <div className={styles.pandprice}>
                 <p className={styles.paragraph}>{spot.description}</p>
                 <div className={styles.priceDetails}>
-                <h4>{spot.price} per night</h4>
-                <p className={styles.rating}>
-                    <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
-                </p>
+                    <div className={styles.priceDetailscontainer}>
+                        <h4>{spot.price} per night</h4>
+                        <p className={styles.rating}>
+                            <i className="fas fa-star"></i> {renderRating()} {spot.numReviews > 0 && "·"} {renderReviewsCount()}
+                        </p>
+                    </div>
                 <button className={styles.reserveBtn} onClick={handleReserveClick}>Reserve</button>
                 </div>
             </div>
@@ -204,7 +212,7 @@ const GetDetailsSpot = () => {
 
             <div>
                 {userId && (userId !== spot.owner_id) && (!reviewers.includes(userId)) && (
-                     <button onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
+                     <button className={styles.postreviewbtn} onClick={() => openReviewModal(spot.id)}>Post Your Review</button>
                 )}
             </div>
 

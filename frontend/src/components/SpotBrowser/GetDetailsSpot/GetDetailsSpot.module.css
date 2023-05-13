@@ -108,11 +108,17 @@
   .priceDetails .rating {
     font-size: 14px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-top: 40px;
+    margin-left: 80px;
   }
 
   .priceDetails .rating i {
     color: #ff385c;
+  }
+
+  .priceDetailscontainer{
+    display: flex;
+    align-items: center;
   }
 
   .reserveBtn {
@@ -149,3 +155,31 @@
     color: grey;
     font-size: 14px;
   }
+
+
+  .postreviewbtn {
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #FF5A5F;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.postreviewbtn:hover {
+    background-color: #FF7D85;
+}
+
+.postreviewbtnn:active {
+  background-image: linear-gradient(to bottom, #ff5a5f, #ff385c)
+}
+
+.postreviewbtn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.4);
+}

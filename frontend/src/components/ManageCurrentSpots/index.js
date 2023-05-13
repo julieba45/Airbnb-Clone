@@ -68,8 +68,8 @@ const GetAllCurrentSpots = () => {
                     <p>${spot.price} night</p>
 
                   </NavLink>
-                  <button onClick={() => handleUpdateClick(spot)}>Update</button>
-                  <button onClick={() => openDeleteConfirmation(spot.id)}>Delete</button>
+                  <button className="update-mcs" onClick={() => handleUpdateClick(spot)}>Update</button>
+                  <button className="delete-mcs" onClick={() => openDeleteConfirmation(spot.id)}>Delete</button>
                 </div>
               ))}
             </div>
