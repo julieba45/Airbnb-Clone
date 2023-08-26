@@ -1,5 +1,8 @@
 # AirBnB Clone
 
+## Landing Page 
+![Schema Design](Images/airbnb-landing.png?raw=true)
+
 ## Database Schema Design
 
 ![Schema Design](schema.jpg?raw=true)
